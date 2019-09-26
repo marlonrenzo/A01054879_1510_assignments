@@ -1,9 +1,9 @@
 def convert_to_roman_numeral(user_input):
     """
-    Convert positive integer into a roman numeral.
+    Convert positive integer into a roman numeral string.
 
-    :param positive_int: int
-    :precondition: number must be a postive integer
+    :param user_input: positive integer to convert
+    :precondition: number must be a postive integer between 1 and 10,000
     :postcondition: converts to a roman numeral
     :return: a roman numeral as a string
     """
