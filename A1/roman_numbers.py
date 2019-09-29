@@ -54,6 +54,12 @@ def convert_to_roman_numeral(user_input):
     :precondition: must be in the range [1, 10_000]
     :param user_input: The integer to be converted
     :return: The corresponding roman numeral as a string
+    >>> convert_to_roman_numeral(0)
+    ''
+    >>> convert_to_roman_numeral(10)
+    'X'
+    >>> convert_to_roman_numeral(9999)
+    'MMMMMMMMMCMXCIX'
     """
     thousands = find_thousands(user_input)
     thousands_letters = get_letters(thousands, "M")
@@ -89,6 +95,14 @@ def get_letters(place_value, roman_numeral_string):
     :param place_value: The value found in a particular number place as an int
     :param roman_numeral_string: The character associated witht the place value as as string
     :return: The correct string of characters to represent the place value as a string
+    >>> get_letters(1, "a")
+    'a'
+    >>> get_letters(4, "X")
+    'XL'
+    >>> get_letters(15, "x")
+    'xxxxxxxxxxxxxxx'
+    >>> get_letters(10, "I")
+    'X'
     """
     if place_value == 4 or place_value == 9:
         string = replace_4_or_9(place_value, roman_numeral_string)
@@ -112,10 +126,17 @@ def replace_4_or_9(value, roman_numeral_string):
 
     :precondition: value must be a positive integer
     :precondition: roman_numeral_string must be a string
+    :precondition: value must equal 4 or 9
     :postcondition: will return the correct string of characters for the corresponding value
     :param value: The value found in a particular number place as an int
     :param roman_numeral_string: The character associated with the place value as a string
     :return: The correct string for the corresponding place value
+    >>> replace_4_or_9(4, "X")
+    'XL'
+    >>> replace_4_or_9(9, "C")
+    'CM'
+    >>> replace_4_or_9(4, "test")
+
     """
     if value == 4:
         if roman_numeral_string == "C":
@@ -141,9 +162,18 @@ def replace_5_or_10(value, roman_numeral_string):
     """
     Replace a string with the value 5 or 10 into a fifth or tenth character.
 
+    :precondition: value must be a positive integer
+    :precondition: roman_numeral_string must be a string
+    :precondition: value must equal 5 or 10
     :param value: The value found in a particular number place as an int
     :param roman_numeral_string: The character associated with the place value as a string
     :return: The correct string for the corresponding place value
+    >>> replace_5_or_10(5, "X")
+    'L'
+    >>> replace_5_or_10(10, "C")
+    'D'
+    >>> replace_5_or_10(5, "test")
+
     """
     if value == 5:
         if roman_numeral_string == "C":
@@ -171,10 +201,18 @@ def find_remainder(original_value, converted_value, multiplier):
 
     The converted value is multiplied by the multiplier that will equal the place value.
 
+    :precondition: original value must be a positive integer
+    :postcondition: will return a positive integer
     :param original_value: the value left for the next place value as an int
     :param converted_value: the value found in the place value as an int
     :param multiplier: the place value as an int
     :return: the excess value after subtracting the amount found in the place value as an int
+    >>> find_remainder(1, 1, 0)
+    1
+    >>> find_remainder(100000, 5, 100)
+    99500
+    >>> find_remainder(785, 7, 5)
+    750
     """
     excess_value = original_value - (converted_value * multiplier)
     excess_value = int(excess_value)
@@ -185,8 +223,16 @@ def find_thousands(number):
     """
     Convert a number to a place value in the thousands place.
 
+    :precondition: must be a positive integer
+    :postcondition: will return a value for the thousands place value
     :param number: the value to convert as an int
     :return: thousands place value as an int
+    >>> find_thousands(1000000)
+    1000
+    >>> find_thousands(999)
+    0
+    >>> find_thousands(2000)
+    2
     """
     if number == 10000:
         return 10
@@ -201,8 +247,16 @@ def find_hundreds(number):
     """
     Convert a number to a place value in the hundreds place.
 
+    :precondition: must be a positive integer
+    :postcondition: will return a value for the hundreds place value
     :param number: the value to convert as an int
     :return: hundreds place value
+    >>> find_hundreds(10000)
+    100
+    >>> find_hundreds(100)
+    1
+    >>> find_hundreds(99)
+    0
     """
     if number >= 100:
         number = int(number / 100)
@@ -211,12 +265,21 @@ def find_hundreds(number):
         return 0
 
 
+
 def find_tens(number):
     """
     Convert a number to a place value in the tens place.
 
+    :precondition: must be a positive integer
+    :postcondition: will return a value for the tens place value
     :param number: the value to convert as an int
     :return: tens place value
+    >>> find_tens(10090)
+    1009
+    >>> find_tens(9)
+    0
+    >>> find_tens(99)
+    9
     """
     if number >= 10:
         number = int(number / 10)
@@ -228,11 +291,19 @@ def find_fives(number):
     """
     Convert a number to a place value in the fives place.
 
-    Check if the value is nine, if the value isnt nine return the number to prevent errors in the conversion process.
+    Check if the value is nine, if the value isn't nine return the number to prevent errors in the conversion process.
 
     If the value is 9, then return a value that will represent the number of fives in the remainder.
+    :precondition: must be a positive integer
+    :postcondition: will return a value for the fives place value
     :param number: the value to convert as an int
     :return: fives place value
+    >>> find_fives(560)
+    112
+    >>> find_fives(5)
+    1
+    >>> find_fives(9)
+    0
     """
     if number !=9:
         number = int(number / 5)
@@ -247,8 +318,16 @@ def find_ones(number):
     """
     Convert a number to a place value in the ones place.
 
+    :precondition: must be a positive integer
+    :postcondition: will return a value for the ones place value
     :param number: the value to convert as an int
     :return: ones place value
+    >>> find_ones(560)
+    560
+    >>> find_ones(5)
+    5
+    >>> find_ones(0)
+    0
     """
     number = int(number / 1)
     return number
@@ -258,12 +337,22 @@ def final_conversion(thousands, hundreds, tens, fives, ones):
     """
     Format the final place value letters into one concatenated string.
 
+    :precondition: all parameters must be string
+    :postcondition: will return a concatenated string
     :param thousands: letters in the thousands place as a string
+    :param five_hundreds: letters in the five hundreds place
     :param hundreds: letters in the hundreds place as a string
+    :param fifties: letters in the fifties place
     :param tens: letters in the tens place as a string
     :param fives: letters in the fives place as a string
     :param ones: letters in the ones place as a string
     :return: a concatenated string
+    >>> final_conversion("","","test   ","test","test")
+    'testtesttest'
+    >>> final_conversion("one","two","  three  ","four","five")
+    'onetwothreefourfive'
+    >>> final_conversion("","","","","")
+    ''
     """
     format = thousands.strip() + hundreds.strip() + tens.strip() + fives.strip() + ones.strip()
     return format
@@ -272,6 +361,8 @@ def final_conversion(thousands, hundreds, tens, fives, ones):
 def main():
     """Run the program by calling the main function."""
     print(convert_to_roman_numeral(4999))
+    print(convert_to_roman_numeral(498))
+    print(convert_to_roman_numeral(54))
     doctest.testmod()
 
 
