@@ -61,27 +61,35 @@ def convert_to_roman_numeral(user_input):
 
     tens = find_tens(remainder_hundreds)
     tens_letters = get_letters(tens, "X")
-    remainder_tens = find_remainder(remainder_hundreds, tens, 100)
+    remainder_tens = find_remainder(remainder_hundreds, tens, 10)
 
-    ones = find_ones(user_input)
+    fives = find_fives(remainder_tens)
+    fives_letters = get_letters(fives, "V")
+    remainder_fives = find_remainder(remainder_tens, fives, 5)
+
+    ones = find_ones(remainder_fives)
     ones_letters = get_letters(ones, "I")
-    final_conversion
-    return final_conversion
+
+    roman_numeral = final_conversion(thousands_letters, hundreds_letters, tens_letters, fives_letters, ones_letters)
+    print(roman_numeral)
+
 
 
 def get_letters(place_value, roman_numeral_string):
-
-    if place_value == 4 or 9:
+    if place_value == 4 or place_value == 9:
         string = replace_4_or_9(place_value, roman_numeral_string)
         return string
-    if place_value == 5 or 10:
+
+    if place_value == 5 or place_value == 10:
         string = replace_5_or_10(place_value, roman_numeral_string)
         return string
-    elif place_value != 4 or 9 or 5 or 10:
+
+    elif place_value == 0:
+        return ""
+
+    else:
         string = roman_numeral_string * place_value
         return string
-    elif place_value == 0:
-        return place_value
 
 
 def replace_4_or_9(length, roman_numeral_string):
@@ -92,21 +100,21 @@ def replace_4_or_9(length, roman_numeral_string):
             return "IV"
         if roman_numeral_string == "X":
             return "XL"
-        if roman_numeral_string == "C":
-            return "CD"
+        if roman_numeral_string == "M":
+            return "MMMM"
     if length == 9:
         if roman_numeral_string == "C":
-            return "CD"
+            return "CM"
         if roman_numeral_string == "I":
-            return "IV"
+            return "IX"
         if roman_numeral_string == "X":
-            return "XL"
-        if roman_numeral_string == "C":
-            return "CD"
+            return "XC"
+        if roman_numeral_string == "M":
+            return "MMMMMMMMM"
 
 
-def replace_5_or_10(length, roman_numeral_string):
-    if length == 5:
+def replace_5_or_10(value, roman_numeral_string):
+    if value == 5:
         if roman_numeral_string == "C":
             return "D"
         if roman_numeral_string == "I":
@@ -115,13 +123,13 @@ def replace_5_or_10(length, roman_numeral_string):
             return "L"
         if roman_numeral_string == "M":
             return "MMMMM"
-    if length == 10:
+    if value == 10:
         if roman_numeral_string == "C":
-            return "CD"
+            return "D"
         if roman_numeral_string == "I":
-            return "IV"
+            return "X"
         if roman_numeral_string == "X":
-            return "XL"
+            return "C"
         if roman_numeral_string == "M":
             return "MMMMMMMMMM"
 
@@ -155,6 +163,7 @@ def find_hundreds(number):
     elif number < 100:
         return 0
 
+
 def find_tens(number):
     if number >= 10:
         number = int(number / 10)
@@ -162,10 +171,23 @@ def find_tens(number):
     elif number < 10:
         return 0
 
+def find_fives(number):
+    if number !=9:
+        number = int(number / 5)
+        return number
+    elif number < 10:
+        return 0
+    else:
+        return number
+
 def find_ones(number):
-    number = int(number / 10)
+    number = int(number / 1)
     return number
 
+
+def final_conversion(thousands, hundreds, tens, fives, ones):
+    format = thousands.strip() + hundreds.strip() + tens.strip() + fives.strip() + ones.strip()
+    return format
 
 
 
@@ -182,25 +204,9 @@ def find_ones(number):
 def main():
     # print(convert_to_roman_numeral(14))
     # print(convert_to_roman_numeral(84))
-    print(convert_to_roman_numeral(400))
+    convert_to_roman_numeral(4999)
     # test = 4
     # print(replace_4_or_9(test,"I"))
-
-
-    # user_input = 400
-    # thousands = find_thousands(user_input)
-    # thousands_letters = get_letters(thousands, "M")
-    # remainder = find_remainder(user_input, thousands, 1000)
-    # hundreds = find_hundreds(remainder)
-    # print(hundreds)
-
-
-    # hundreds_letters = get_letters(hundreds, "C")
-    # remainder_hundreds = (remainder, hundreds, 100)
-    # print(find_hundreds(hundres_letters))
-
-
-
 
 
 
