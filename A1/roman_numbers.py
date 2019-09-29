@@ -43,13 +43,17 @@
 #     else:
 #         return None
 
-
+import doctest
 
 
 def convert_to_roman_numeral(user_input):
     """
+    Call all necessary fucntions to correctly represent an integer as a roman numeral.
 
-    :return:
+    :precondition: must be a positive integer
+    :precondition: must be in the range [1, 10_000]
+    :param user_input: The integer to be converted
+    :return: The corresponding roman numeral as a string
     """
     thousands = find_thousands(user_input)
     thousands_letters = get_letters(thousands, "M")
@@ -71,11 +75,21 @@ def convert_to_roman_numeral(user_input):
     ones_letters = get_letters(ones, "I")
 
     roman_numeral = final_conversion(thousands_letters, hundreds_letters, tens_letters, fives_letters, ones_letters)
-    print(roman_numeral)
+    return roman_numeral
 
 
 
 def get_letters(place_value, roman_numeral_string):
+    """
+    Convert a place value with the associated roman numeral string into the correct string of characters to represent the value.
+
+    :precondition: roman_numeral must be a string
+    :precondition: must be a postive integer
+    :postcondition: returns a value that will make up part of the final string
+    :param place_value: The value found in a particular number place as an int
+    :param roman_numeral_string: The character associated witht the place value as as string
+    :return: The correct string of characters to represent the place value as a string
+    """
     if place_value == 4 or place_value == 9:
         string = replace_4_or_9(place_value, roman_numeral_string)
         return string
@@ -92,8 +106,18 @@ def get_letters(place_value, roman_numeral_string):
         return string
 
 
-def replace_4_or_9(length, roman_numeral_string):
-    if length == 4:
+def replace_4_or_9(value, roman_numeral_string):
+    """
+    Replace a string with the value 4 or 9 into a fifth or tenth character.
+
+    :precondition: value must be a positive integer
+    :precondition: roman_numeral_string must be a string
+    :postcondition: will return the correct string of characters for the corresponding value
+    :param value: The value found in a particular number place as an int
+    :param roman_numeral_string: The character associated with the place value as a string
+    :return: The correct string for the corresponding place value
+    """
+    if value == 4:
         if roman_numeral_string == "C":
             return "CD"
         if roman_numeral_string == "I":
@@ -102,7 +126,7 @@ def replace_4_or_9(length, roman_numeral_string):
             return "XL"
         if roman_numeral_string == "M":
             return "MMMM"
-    if length == 9:
+    if value == 9:
         if roman_numeral_string == "C":
             return "CM"
         if roman_numeral_string == "I":
@@ -114,6 +138,13 @@ def replace_4_or_9(length, roman_numeral_string):
 
 
 def replace_5_or_10(value, roman_numeral_string):
+    """
+    Replace a string with the value 5 or 10 into a fifth or tenth character.
+
+    :param value: The value found in a particular number place as an int
+    :param roman_numeral_string: The character associated with the place value as a string
+    :return: The correct string for the corresponding place value
+    """
     if value == 5:
         if roman_numeral_string == "C":
             return "D"
@@ -136,10 +167,14 @@ def replace_5_or_10(value, roman_numeral_string):
 
 def find_remainder(original_value, converted_value, multiplier):
     """
+    Determine the remainder of a number after it gets subracted by converted value in a number's place and multuplier.
 
-    :param original_value:
-    :param subtracting_value:
-    :return:
+    The converted value is multiplied by the multiplier that will equal the place value.
+
+    :param original_value: the value left for the next place value as an int
+    :param converted_value: the value found in the place value as an int
+    :param multiplier: the place value as an int
+    :return: the excess value after subtracting the amount found in the place value as an int
     """
     excess_value = original_value - (converted_value * multiplier)
     excess_value = int(excess_value)
@@ -147,6 +182,12 @@ def find_remainder(original_value, converted_value, multiplier):
 
 
 def find_thousands(number):
+    """
+    Convert a number to a place value in the thousands place.
+
+    :param number: the value to convert as an int
+    :return: thousands place value as an int
+    """
     if number == 10000:
         return 10
     elif number >= 1000:
@@ -157,6 +198,12 @@ def find_thousands(number):
 
 
 def find_hundreds(number):
+    """
+    Convert a number to a place value in the hundreds place.
+
+    :param number: the value to convert as an int
+    :return: hundreds place value
+    """
     if number >= 100:
         number = int(number / 100)
         return number
@@ -165,6 +212,12 @@ def find_hundreds(number):
 
 
 def find_tens(number):
+    """
+    Convert a number to a place value in the tens place.
+
+    :param number: the value to convert as an int
+    :return: tens place value
+    """
     if number >= 10:
         number = int(number / 10)
         return number
@@ -172,6 +225,15 @@ def find_tens(number):
         return 0
 
 def find_fives(number):
+    """
+    Convert a number to a place value in the fives place.
+
+    Check if the value is nine, if the value isnt nine return the number to prevent errors in the conversion process.
+
+    If the value is 9, then return a value that will represent the number of fives in the remainder.
+    :param number: the value to convert as an int
+    :return: fives place value
+    """
     if number !=9:
         number = int(number / 5)
         return number
@@ -180,35 +242,37 @@ def find_fives(number):
     else:
         return number
 
+
 def find_ones(number):
+    """
+    Convert a number to a place value in the ones place.
+
+    :param number: the value to convert as an int
+    :return: ones place value
+    """
     number = int(number / 1)
     return number
 
 
 def final_conversion(thousands, hundreds, tens, fives, ones):
+    """
+    Format the final place value letters into one concatenated string.
+
+    :param thousands: letters in the thousands place as a string
+    :param hundreds: letters in the hundreds place as a string
+    :param tens: letters in the tens place as a string
+    :param fives: letters in the fives place as a string
+    :param ones: letters in the ones place as a string
+    :return: a concatenated string
+    """
     format = thousands.strip() + hundreds.strip() + tens.strip() + fives.strip() + ones.strip()
     return format
 
 
-
-
-
-
-
-
-
-
-
-
-
 def main():
-    # print(convert_to_roman_numeral(14))
-    # print(convert_to_roman_numeral(84))
-    convert_to_roman_numeral(4999)
-    # test = 4
-    # print(replace_4_or_9(test,"I"))
-
-
+    """Run the program by calling the main function."""
+    print(convert_to_roman_numeral(4999))
+    doctest.testmod()
 
 
 if __name__ == '__main__':
