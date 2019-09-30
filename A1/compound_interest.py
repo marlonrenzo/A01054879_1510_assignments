@@ -58,7 +58,7 @@ def get_interest_rate(rate):
     >>> get_interest_rate(999)
     9.99
     """
-    rate = rate/100
+    rate = rate / 100
     return rate
 
 
