@@ -4,7 +4,7 @@ import doctest
 
 def roll_die(number_of_rolls, number_of_sides):
     """
-    Will return a random positive integer base on the parameters.
+    Return a random positive integer base on the parameters.
 
     :precondition: both parameters must be positive.
     :post condition: will return a sum of x amount of rolls on a y-sided die
@@ -43,6 +43,7 @@ def choose_inventory(inventory, selection):
     Warning: Your Selection of items for inventory items is a larger than the amount items available.
     ['first', 'second', 'third']
     """
+    print("Welcome to the Olde Tyme Merchant!\n\nHere is what we have for sale:\n")
     if inventory == [] and selection == 0:
         return []
     elif selection < 0:
@@ -58,21 +59,41 @@ def choose_inventory(inventory, selection):
         return random_selection
 
 
-def create_character(name_length):
+def create_character():
     """
-    Create a list including items to associate to a character.
+    Create a dictionary including attributes to associate to a character.
 
-    Each list element, except for the character name, will be a mini list containing an attribute along with a value.
-    :precondition: parameter must be a positive integer
-    :post condition: will create a character as a list of attributes
-    :param name_length: an integer
-    :return:
+    :post condition: will create a character as a dictionary of attributes
+    :return: the information of a character as a dictionary
     """
-    character = {'Name': generate_name(name_length // 2), 'Strength': roll_die(3, 6),
-                 'Dexterity': roll_die(3, 6), 'Constitution': roll_die(3, 6),
-                 'Intelligence': roll_die(3, 6), 'Wisdom': roll_die(3, 6),
-                 'Charisma': roll_die(3, 6)}
+    char_class = select_class()
+    hp = roll_hp(char_class)
+    character = {'Name': get_character_name(), 'Race': select_race(), 'Class': char_class, 'HP': [hp, hp],
+                 'Strength': roll_die(3, 6), 'Dexterity': roll_die(3, 6), 'Constitution': roll_die(3, 6),
+                 'Intelligence': roll_die(3, 6), 'Wisdom': roll_die(3, 6), 'Charisma': roll_die(3, 6), 'XP': 0}
     return character
+
+
+def roll_hp(character_class):
+    if character_class == 'barbarian':
+        return roll_die(1, 12)
+    elif character_class == 'bard' or 'cleric' or 'druid' or 'monk' or 'rogue' or 'warlock':
+        return roll_die(1, 8)
+    elif character_class == 'fighter' or 'paladin' or 'ranger':
+        return roll_die(1, 10)
+    elif character_class == 'sorcerer' or 'wizard':
+        return roll_die(1, 6)
+    else:
+        return 'Error'
+
+
+def get_character_name():
+    """
+    Ask the user for a name for their new character.
+    :return: the user's input as a string
+    """
+    user_name = input("Enter your character's name:\n")
+    return user_name.strip().capitalize()
 
 
 def print_character(character):
@@ -127,11 +148,49 @@ def print_character(character):
 
 
 def select_race():
-    pass
+    """
+    Ask the user to select a race from a list of varied races provided in a dictionary.
+
+    Print out the races in a neatly-formatted manner using a for loop and f-strings.
+
+    User must enter a number that is included in the list of available selections.
+    :return: the user-selected race
+    """
+    race = {1: "Dwarf", 2: "Elf", 3: "Gnome", 4: "Dwarf", 5: "Human", 6: "Dragonborn", 7: "Halfling", 8: "Half-Orc", 9: "Half-Elf", 10: "Tiefling"}
+    for x in range(1, 11):
+        print(f"{x}. {race[x]}")
+
+    user_race = int(input("Select your race (by number):\n"))
+    race = race[user_race].lower()
+    return race
+
+
+def select_class():
+    """
+
+    :return:
+    """
+    classes = {1: "Barbarian", 2: "Bard", 3: "Cleric", 4: "Druid",
+               5: "Fighter", 6: "Monk", 7: "Paladin", 8: "Ranger",
+               9: "Rogue", 10: "Sorcerer", 11: "Warlock", 12: "Wizard"}
+    for x in range(1, 13):
+        print(f"{x}. {classes[x]}")
+
+    user_class = int(input("Select your class (by number):\n"))
+    selected_class = classes[user_class].lower()
+    return selected_class
 
 
 def generate_character():
     pass
 
+
+def combat_round():
+    pass
+
+
 if __name__ == '__main__':
-    doctest.testmod()
+    # doctest.testmod()
+    # print(select_race())
+    print(create_character())
+    # tester = {'Yo': ["hey", "hello"]}
