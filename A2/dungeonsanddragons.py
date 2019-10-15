@@ -46,30 +46,38 @@ def choose_inventory():
     item_selection = 0
     shop_items = {1: 'sword', 2: 'dagger', 3: 'battleaxe', 4: 'spear', 5: 'quarterstaff', 6: 'shield', 7: 'potion '}
     items = []
-    print("Welcome to the Olde Tyme Merchant!\n\nHere is what we have for sale:\n")
+    print("\n -----Welcome to the Olde Tyme Merchant!\n\nHere is what we have for sale:-----\n")
     for x in range(1, 8):
         print(f"{x}. {shop_items[x]}")
     item_selection = int(input("Enter the number of the item you would like to buy (-1 to finish shopping)\n"))
+    if 7 >= item_selection > 0:
+        item = shop_items[item_selection]
+        items.append(item)
+        shop_items[item_selection] = 'Sold'
+    elif item_selection == -1:
+        print("Thank you for shopping, here are your items.")
+        return items
+    elif len(shop_items) == 0:
+        print("There are no more items to select.")
+        item_selection = -1
+    else:
+        print("Invalid entry. Please select from the available items (by number).\n")
     while item_selection >= 0:
         for x in range(1, 8):
             print(f"{x}. {shop_items[x]}")
         item_selection = int(input("Enter the number of the item you would like to buy (-1 to finish shopping)\n"))
-        if item_selection > 0:
+        if 7 >= item_selection > 0:
             item = shop_items[item_selection]
             items.append(item)
-            shop_items.pop(item_selection)
+            shop_items[item_selection] = 'Sold'
         elif item_selection == -1:
-            print("Thank you for shopping")
+            print("Thank you for shopping, here are your items.")
             return items
         elif len(shop_items) == 0:
             print("There are no more items to select.")
             item_selection = -1
         else:
             print("Invalid entry. Please select from the available items (by number).\n")
-            for x in range(1, 8):
-                print(f"{x}. {shop_items[x]}")
-
-
 
 
 
@@ -132,7 +140,7 @@ def get_character_name():
     Ask the user for a name for their new character.
     :return: the user's input as a string
     """
-    user_name = input("Enter your character's name:\n")
+    user_name = input("Create a name for your character:\n")
     return user_name.strip().capitalize()
 
 
@@ -245,7 +253,6 @@ def combat_round():
 if __name__ == '__main__':
     # doctest.testmod()
     # print(select_race())
-    # new_character = create_character()
-    # print(new_character)
-    # print_character(new_character)
+    new_character = create_character()
+    print_character(new_character)
     print(choose_inventory())
