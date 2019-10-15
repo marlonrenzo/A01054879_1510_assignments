@@ -22,9 +22,9 @@ def roll_die(number_of_rolls, number_of_sides):
         return total
 
 
-def choose_inventory(inventory, selection):
+def choose_inventory():
     """
-    Select items from inventory and place into a sorted list.
+    Select items from inventory and place into a list.
 
     Check all cases ranging from empty lists, 0 selections or negative selections and print a warning for these cases.
 
@@ -43,20 +43,52 @@ def choose_inventory(inventory, selection):
     Warning: Your Selection of items for inventory items is a larger than the amount items available.
     ['first', 'second', 'third']
     """
+    item_selection = 0
+    shop_items = {1: 'sword', 2: 'dagger', 3: 'battleaxe', 4: 'spear', 5: 'quarterstaff', 6: 'shield', 7: 'potion '}
+    items = []
     print("Welcome to the Olde Tyme Merchant!\n\nHere is what we have for sale:\n")
-    if inventory == [] and selection == 0:
-        return []
-    elif selection < 0:
-        print("Warning: Your selection of items for inventory items is a negative number.")
-        return []
-    elif selection > (len(inventory)):
-        print("Warning: Your Selection of items for inventory items is a larger than the amount items available.")
-        sorted_inventory = sorted(inventory)
-        return sorted_inventory
-    else:
-        random_selection = random.sample(inventory, selection)
-        random_selection.sort()
-        return random_selection
+    for x in range(1, 8):
+        print(f"{x}. {shop_items[x]}")
+    item_selection = int(input("Enter the number of the item you would like to buy (-1 to finish shopping)\n"))
+    while item_selection >= 0:
+        for x in range(1, 8):
+            print(f"{x}. {shop_items[x]}")
+        item_selection = int(input("Enter the number of the item you would like to buy (-1 to finish shopping)\n"))
+        if item_selection > 0:
+            item = shop_items[item_selection]
+            items.append(item)
+            shop_items.pop(item_selection)
+        elif item_selection == -1:
+            print("Thank you for shopping")
+            return items
+        elif len(shop_items) == 0:
+            print("There are no more items to select.")
+            item_selection = -1
+        else:
+            print("Invalid entry. Please select from the available items (by number).\n")
+            for x in range(1, 8):
+                print(f"{x}. {shop_items[x]}")
+
+
+
+
+
+
+
+
+    # if inventory == [] and selection == 0:
+    #     return []
+    # elif selection < 0:
+    #     print("Warning: Your selection of items for inventory items is a negative number.")
+    #     return []
+    # elif selection > (len(inventory)):
+    #     print("Warning: Your Selection of items for inventory items is a larger than the amount items available.")
+    #     sorted_inventory = sorted(inventory)
+    #     return sorted_inventory
+    # else:
+    #     random_selection = random.sample(inventory, selection)
+    #     random_selection.sort()
+    #     return random_selection
 
 
 def create_character():
@@ -75,6 +107,14 @@ def create_character():
 
 
 def roll_hp(character_class):
+    """
+    Generate a random number based on the class the user selected.
+
+    :precondition: the class must be properly formatted string
+    :post condition: determine's a character's HP as an integer
+    :param character_class: the character's class as a string
+    :return: a random number as an integer
+    """
     if character_class == 'barbarian':
         return roll_die(1, 12)
     elif character_class == 'bard' or 'cleric' or 'druid' or 'monk' or 'rogue' or 'warlock':
@@ -205,6 +245,7 @@ def combat_round():
 if __name__ == '__main__':
     # doctest.testmod()
     # print(select_race())
-    new_character = create_character()
-    print(new_character)
-    print_character(new_character)
+    # new_character = create_character()
+    # print(new_character)
+    # print_character(new_character)
+    print(choose_inventory())
