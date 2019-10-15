@@ -100,49 +100,62 @@ def print_character(character):
     """
     Format character's attributes in a neat and legible way.
 
-    Check the length of the list provided, and ensure it it formatted properly.
+    Check the length of the list provided, and ensure it is formatted properly.
 
     Include the inventory items associated with the character when the length of the list is 8.
     :precondition: the character list must be properly formatted
     :post condition: will print all the attributes in a legible way
     :param character: a list with all character attributes
     :return: formatted string with all character attributes
-    >>> print_character(['Hi', ['one', 12], ['two', 9], ['three', 10], ['four', 12], ['five', 13], ['six', 13]])
+    >>> print_character({'Name': 'Hi', 'a': 'dwarf', 'b': 'cleric', 'c': [7, 7], 'd': 7, 'e': 11, 'f': 10, 'g': 10, 'h': 16, 'i': 8, 'j': 0})
     Name: Hi
-    one: 12
-    two: 9
-    three: 10
-    four: 12
-    five: 13
-    six: 13
-    >>> print_character(['.', ['one', -49], ['two', 0], ['three', 5000], ['four', 1], ['five', 17], ['six', 'seven']])
-    Name: .
-    one: -49
-    two: 0
-    three: 5000
-    four: 1
-    five: 17
-    six: seven
+    a: dwarf
+    b: cleric
+    c: 7/7
+    d: 7
+    e: 11
+    f: 10
+    g: 10
+    h: 16
+    i: 8
+    j: 0
+    >>> print_character({'Name': 'Hi', 'a': 'dwarf', 'b': 'cleric', 'c': [7, 7], 'd': 7, 'e': 11, 'f': 10, 'g': 10, 'h': 16, 'i': 8, 'j': 0})
+    Name: Hi
+    a: dwarf
+    b: cleric
+    c: 7/7
+    d: 7
+    e: 11
+    f: 10
+    g: 10
+    h: 16
+    i: 8
+    j: 0
     """
-    if len(character) == 7:
-        print(f"Name: {character[0]}")
-        print(f"{character[1][0]}: {character[1][1]}")
-        print(f"{character[2][0]}: {character[2][1]}")
-        print(f"{character[3][0]}: {character[3][1]}")
-        print(f"{character[4][0]}: {character[4][1]}")
-        print(f"{character[5][0]}: {character[5][1]}")
-        print(f"{character[6][0]}: {character[6][1]}")
-    elif len(character) == 8:
-        print(f"Name: {character[0]}")
-        print(f"{character[1][0]}: {character[1][1]}")
-        print(f"{character[2][0]}: {character[2][1]}")
-        print(f"{character[3][0]}: {character[3][1]}")
-        print(f"{character[4][0]}: {character[4][1]}")
-        print(f"{character[5][0]}: {character[5][1]}")
-        print(f"{character[6][0]}: {character[6][1]}")
-        print("--Here are your inventory items--")
-        for length in range(0, len(character[7])):
-            print(character[7][length])
+    if len(character) == 11:
+        print(f"Name: {character['Name']}")
+        print(f"Race: {character['Race']}")
+        print(f"Class: {character['Class']}")
+        print(f"HP: {character['HP'][1]}/{character['HP'][0]}")
+        print(f"Strength: {character['Strength']}")
+        print(f"Dexterity: {character['Dexterity']}")
+        print(f"Constitution: {character['Constitution']}")
+        print(f"Intelligence: {character['Intelligence']}")
+        print(f"Wisdom: {character['Wisdom']}")
+        print(f"Charisma: {character['Charisma']}")
+        print(f"Experience: {character['XP']}")
+    # elif len(character) == 12:
+    #     print(f"Name: {character[0]}")
+    #     print(f"{character[1][0]}: {character[1][1]}")
+    #     print(f"{character[2][0]}: {character[2][1]}")
+    #     print(f"{character[3][0]}: {character[3][1]}")
+    #     print(f"{character[4][0]}: {character[4][1]}")
+    #     print(f"{character[5][0]}: {character[5][1]}")
+    #     print(f"{character[6][0]}: {character[6][1]}")
+    #     print("--Here are your inventory items--")
+    #     for length in range(0, len(character[7])):
+    #         print(character[7][length])
+
     else:
         print("Warning: Error found with your list of character attributes")
 
@@ -167,8 +180,12 @@ def select_race():
 
 def select_class():
     """
+    Ask the user to select a class from a list of varied classes provided in a dictionary.
 
-    :return:
+    Print out the classes in a neatly-formatted manner using a for loop and f-strings.
+
+    User must enter a number that is included in the list of available selections.
+    :return: the user-selected class
     """
     classes = {1: "Barbarian", 2: "Bard", 3: "Cleric", 4: "Druid",
                5: "Fighter", 6: "Monk", 7: "Paladin", 8: "Ranger",
@@ -181,10 +198,6 @@ def select_class():
     return selected_class
 
 
-def generate_character():
-    pass
-
-
 def combat_round():
     pass
 
@@ -192,5 +205,6 @@ def combat_round():
 if __name__ == '__main__':
     # doctest.testmod()
     # print(select_race())
-    print(create_character())
-    # tester = {'Yo': ["hey", "hello"]}
+    new_character = create_character()
+    print(new_character)
+    print_character(new_character)
