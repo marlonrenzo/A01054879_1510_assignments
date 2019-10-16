@@ -44,45 +44,26 @@ def choose_inventory():
     ['first', 'second', 'third']
     """
     shop_items = {1: 'sword', 2: 'dagger', 3: 'battleaxe', 4: 'spear', 5: 'quarterstaff', 6: 'shield', 7: 'potion '}
+    shop_items_sold = shop_items
+    item_selection = 0
     items = []
     print("\n -----Welcome to the Olde Tyme Merchant!-----\n\nHere is what we have for sale:\n")
-    for x in range(1, 8):
-        print(f"{x}. {shop_items[x]}")
-    item_selection = int(input("Enter the number of the item you would like to buy (-1 to finish shopping)\n"))
-    if 7 >= item_selection > 0:
-
-        item = shop_items[item_selection]
-        del shop_items[item_selection]
-        items.append(item)
-        shop_items[item_selection] = 'Sold'
-    elif item_selection == -1:
-        print("Thank you for shopping, here are your items.")
-        return items
-    elif len(shop_items) == 0:
-        print("There are no more items to select.")
-        item_selection = -1
-    else:
-        print("Invalid entry. Please select from the available items (by number).\n")
-
-    while item_selection >= 0 and len(shop_items) > 0:
+    while item_selection != -1 and len(shop_items) > 0:
         for x in range(1, 8):
             print(f"{x}. {shop_items[x]}")
         item_selection = int(input("Enter the number of the item you would like to buy (-1 to finish shopping)\n"))
         if 7 >= item_selection > 0:
-            shop_items_sold = shop_items
             item = shop_items[item_selection]
             del shop_items[item_selection]
             items.append(item)
             shop_items_sold[item_selection] = 'Sold'
-        elif item_selection == -1:
-            print("Thank you for shopping, here are your items.")
-            return items
         elif len(shop_items) == 0:
-            print("There are no more items to select.")
             item_selection = -1
         else:
             print("Invalid entry. Please select from the available items (by number).\n")
 
+    print("Thank you for shopping, here are your items.")
+    return items
 
 
 def create_character():
@@ -97,7 +78,7 @@ def create_character():
     character = {'Name': get_character_name(4), 'Race': select_race(), 'Class': char_class, 'HP': [hp, hp],
                  'Strength': roll_die(3, 6), 'Dexterity': roll_die(3, 6), 'Constitution': roll_die(3, 6),
                  'Intelligence': roll_die(3, 6), 'Wisdom': roll_die(3, 6), 'Charisma': roll_die(3, 6),
-                 'XP': 0, 'Inventory': []}
+                 'XP': 0, 'Inventory': ['hey', 'you']}
     return character
 
 
@@ -205,42 +186,20 @@ def print_character(character):
     j: 0
     """
     attributes = ['Name', 'Race', 'Class', 'HP', 'Strength', 'Dexterity', 'Constitution', 'Intelligence', 'Wisdom', 'Charisma', 'XP', 'Inventory']
-    for index in range(0, len(attributes)):
-        print(f"{attributes[index]}: {character[attributes[index]]}")
+    # for index in range(0, len(attributes)):
+    #     print(f"{attributes[index]}: {character[attributes[index]]}")
 
-    if len(character['Inventory']) == 11:
-        for index in range(0, len(attributes) - 2):
+    if character['Inventory'] == []:
+        for index in range(0, len(attributes) - 1):
             print(f"{attributes[index]}: {character[attributes[index]]}")
-        # print(f"Name: {character['Name']}")
-        # print(f"Race: {character['Race']}")
-        # print(f"Class: {character['Class']}")
-        # print(f"HP: {character['HP'][1]}/{character['HP'][0]}")
-        # print(f"Strength: {character['Strength']}")
-        # print(f"Dexterity: {character['Dexterity']}")
-        # print(f"Constitution: {character['Constitution']}")
-        # print(f"Intelligence: {character['Intelligence']}")
-        # print(f"Wisdom: {character['Wisdom']}")
-        # print(f"Charisma: {character['Charisma']}")
-        # print(f"Experience: {character['XP']}")
     elif len(character['Inventory']) > 0:
-        for index in range(0, len(attributes) - 2):
+        for index in range(0, len(attributes) - 1):
             print(f"{attributes[index]}: {character[attributes[index]]}")
-        # print(f"Name: {character['Name']}")
-        # print(f"Race: {character['Race']}")
-        # print(f"Class: {character['Class']}")
-        # print(f"HP: {character['HP'][1]}/{character['HP'][0]}")
-        # print(f"Strength: {character['Strength']}")
-        # print(f"Dexterity: {character['Dexterity']}")
-        # print(f"Constitution: {character['Constitution']}")
-        # print(f"Intelligence: {character['Intelligence']}")
-        # print(f"Wisdom: {character['Wisdom']}")
-        # print(f"Charisma: {character['Charisma']}")
-        # print(f"Experience: {character['XP']}")
-        # print("--Here are your inventory items--")
+
+        print("Here are your items:")
         for length in range(0, len(character['Inventory'])):
             print(character['Inventory'][length])
-
-    elif len(character) != 12:
+    else:
         print("Warning: Error found with your list of character attributes")
 
 
@@ -289,32 +248,38 @@ def combat_round(opponent_one, opponent_two):
         roll_opponent_one = roll_die(1,20)
         roll_opponent_two = roll_die(1, 20)
     if roll_opponent_one > roll_opponent_two:
-        print(f"{opponent_one['Name']} will attack first.")
-        attack_roll_one = roll_die(1, 20)
-        print(f"{opponent_one['Name']} will attack with {attack_roll_one} towards {opponent_two['Name']}")
-        if attack_roll_one > opponent_two['Dexterity']:
-            print(f"{opponent_two['Name']} has fallen. {opponent_one['Name']} has won!")
-        else:
-            print(f"{opponent_two['Name']} has countered the attack!")
+        opponent_two['HP'][1] = attack(opponent_one, opponent_two)
+
     elif roll_opponent_one < roll_opponent_two:
-        print(f"{opponent_two['Name']} will attack first.")
-        attack_roll_two = roll_die(1, 20)
-        print(f"{opponent_two['Name']} will attack with {attack_roll_two} towards {opponent_one['Name']}")
-        if attack_roll_two > opponent_one['Dexterity']:
-            print(f"{opponent_one['Name']} has fallen. {opponent_two['Name']} has won!")
-        else:
-            print(f"{opponent_one['Name']} has countered the attack!")
+        opponent_two['HP'][1] = attack(opponent_two, opponent_one)
+
+
+def attack(first_attacker, second_attacker):
+    print(f"{first_attacker['Name']} will attack first.")
+    print("They are now rolling the die.....")
+    attack_roll_one = roll_die(1, 20)
+    print(f"{first_attacker['Name']} will attack {second_attacker['Name']} with {attack_roll_one} damage!")
+    current_hp = second_attacker['HP'][1] - attack_roll_one
+    if attack_roll_one > second_attacker['Dexterity']:
+        print(f"{second_attacker['Name']} has taken damage. {second_attacker['Name']} now has {current_hp}")
+        return second_attacker['HP'][1]
+    else:
+        current_hp = second_attacker['HP'][1] - attack_roll_one
+        print(f"{second_attacker['Name']} takes the blow! {second_attacker['Name']} now has {current_hp}")
+        return current_hp
+
 
 
 if __name__ == '__main__':
     # doctest.testmod()
     # print(select_race())
 
-    new_character = create_character()
-    print_character(new_character)
+    # new_character = create_character()
+    # print_character(new_character)
     test = choose_inventory()
-    new_character["Inventory"] = test
-    print_character(new_character)
+    print(test)
+    # new_character["Inventory"] = test
+    # print_character(new_character)
 
     # combat_round({'Name': 'Katherine', 'Race': 'gnome', 'Class': 'druid', 'HP': [4, 4], 'Strength': 12, 'Dexterity': 10, 'Constitution': 15, 'Intelligence': 13, 'Wisdom': 5, 'Charisma': 8, 'XP': 0},
     #               {'Name': 'Marlon', 'Race': 'gnome', 'Class': 'druid', 'HP': [4, 4], 'Strength': 12, 'Dexterity': 14,
@@ -325,3 +290,9 @@ if __name__ == '__main__':
     #               'Race', 'Charisma', 'XP']
     # for index in range(0, len(attributes)):
     #     print(f"{attributes[index]}: {character[attributes[index]]}")
+
+
+    # test = {1: 'sword', 2: 'dagger'}
+    # number = 2 / 1
+    # del test[number]
+    # print(test)
