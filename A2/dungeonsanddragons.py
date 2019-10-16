@@ -46,12 +46,14 @@ def choose_inventory():
     item_selection = 0
     shop_items = {1: 'sword', 2: 'dagger', 3: 'battleaxe', 4: 'spear', 5: 'quarterstaff', 6: 'shield', 7: 'potion '}
     items = []
-    print("\n -----Welcome to the Olde Tyme Merchant!\n\nHere is what we have for sale:-----\n")
+    print("\n -----Welcome to the Olde Tyme Merchant!-----\n\nHere is what we have for sale:\n")
     for x in range(1, 8):
         print(f"{x}. {shop_items[x]}")
     item_selection = int(input("Enter the number of the item you would like to buy (-1 to finish shopping)\n"))
     if 7 >= item_selection > 0:
+
         item = shop_items[item_selection]
+        del shop_items[item_selection]
         items.append(item)
         shop_items[item_selection] = 'Sold'
     elif item_selection == -1:
@@ -62,14 +64,17 @@ def choose_inventory():
         item_selection = -1
     else:
         print("Invalid entry. Please select from the available items (by number).\n")
-    while item_selection >= 0:
+
+    while item_selection >= 0 and len(shop_items) > 0:
         for x in range(1, 8):
             print(f"{x}. {shop_items[x]}")
         item_selection = int(input("Enter the number of the item you would like to buy (-1 to finish shopping)\n"))
         if 7 >= item_selection > 0:
+            shop_items_sold = shop_items
             item = shop_items[item_selection]
+            del shop_items[item_selection]
             items.append(item)
-            shop_items[item_selection] = 'Sold'
+            shop_items_sold[item_selection] = 'Sold'
         elif item_selection == -1:
             print("Thank you for shopping, here are your items.")
             return items
@@ -78,6 +83,7 @@ def choose_inventory():
             item_selection = -1
         else:
             print("Invalid entry. Please select from the available items (by number).\n")
+
 
 
 def create_character():
@@ -231,15 +237,41 @@ def select_class():
     return selected_class
 
 
-def combat_round():
-    pass
+def combat_round(opponent_one, opponent_two):
+    roll_opponent_one = 0
+    roll_opponent_two = 0
+    while roll_opponent_one == roll_opponent_two:
+        roll_opponent_one = roll_die(1,20)
+        roll_opponent_two = roll_die(1, 20)
+    if roll_opponent_one > roll_opponent_two:
+        print(f"{opponent_one['Name']} will attack first.")
+        attack_roll_one = roll_die(1, 20)
+        print(f"{opponent_one['Name']} has attack with {attack_roll_one} towards {opponent_two['Name']}")
+        if attack_roll_one > opponent_two['Dexterity']:
+            print(f"{opponent_one['Name']} has won")
+        else:
+            print(f"{opponent_two['Name']} has countered the attack.")
+    elif roll_opponent_one < roll_opponent_two:
+        print(f"{opponent_two['Name']} will attack first.")
+        attack_roll_two = roll_die(1, 20)
+        print(f"{opponent_two['Name']} has attack with {attack_roll_two} towards {opponent_one['Name']}")
+        if attack_roll_two > opponent_one['Dexterity']:
+            print(f"{opponent_two['Name']} has won")
+        else:
+            print(f"{opponent_one['Name']} has countered the attack.")
 
 
 if __name__ == '__main__':
     # doctest.testmod()
     # print(select_race())
-    new_character = create_character()
-    print_character(new_character)
-    test = choose_inventory()
-    new_character["Inventory"] = test
-    print_character(new_character)
+
+    # new_character = create_character()
+    # print_character(new_character)
+    # test = choose_inventory()
+    # new_character["Inventory"] = test
+    # print_character(new_character)
+
+    combat_round({'Name': 'Katherine', 'Race': 'gnome', 'Class': 'druid', 'HP': [4, 4], 'Strength': 12, 'Dexterity': 6, 'Constitution': 15, 'Intelligence': 13, 'Wisdom': 5, 'Charisma': 8, 'XP': 0},
+                  {'Name': 'Marlon', 'Race': 'gnome', 'Class': 'druid', 'HP': [4, 4], 'Strength': 12, 'Dexterity': 6,
+                   'Constitution': 15, 'Intelligence': 13, 'Wisdom': 5, 'Charisma': 8, 'XP': 0})
+
