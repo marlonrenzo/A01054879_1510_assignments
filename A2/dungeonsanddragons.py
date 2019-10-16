@@ -43,7 +43,6 @@ def choose_inventory():
     Warning: Your Selection of items for inventory items is a larger than the amount items available.
     ['first', 'second', 'third']
     """
-    item_selection = 0
     shop_items = {1: 'sword', 2: 'dagger', 3: 'battleaxe', 4: 'spear', 5: 'quarterstaff', 6: 'shield', 7: 'potion '}
     items = []
     print("\n -----Welcome to the Olde Tyme Merchant!-----\n\nHere is what we have for sale:\n")
@@ -95,9 +94,10 @@ def create_character():
     """
     char_class = select_class()
     hp = roll_hp(char_class)
-    character = {'Name': get_character_name(), 'Race': select_race(), 'Class': char_class, 'HP': [hp, hp],
+    character = {'Name': get_character_name(4), 'Race': select_race(), 'Class': char_class, 'HP': [hp, hp],
                  'Strength': roll_die(3, 6), 'Dexterity': roll_die(3, 6), 'Constitution': roll_die(3, 6),
-                 'Intelligence': roll_die(3, 6), 'Wisdom': roll_die(3, 6), 'Charisma': roll_die(3, 6), 'XP': 0}
+                 'Intelligence': roll_die(3, 6), 'Wisdom': roll_die(3, 6), 'Charisma': roll_die(3, 6),
+                 'XP': 0, 'Inventory': []}
     return character
 
 
@@ -122,13 +122,50 @@ def roll_hp(character_class):
         return 'Error'
 
 
-def get_character_name():
+def get_character_name(syllables):
     """
-    Ask the user for a name for their new character.
-    :return: the user's input as a string
+    Generate a name base on a given amount of syllables.
+
+    :precondition: the function will only work for positive non-zero integers
+    :post condition: return a string of letters alternating vowels and consonants
+    :param syllables: an integer
+    :return: a concatenated string of random letters
     """
-    user_name = input("Create a name for your character:\n")
-    return user_name.strip().capitalize()
+    string = ""
+    for x in range(0, syllables):
+        string = string + generate_syllable()
+    return string.capitalize()
+
+
+def generate_vowel():
+    """
+    Generate a random vowel.
+    :return: a random vowel character
+    """
+    vowel = ['a', 'e', 'i', 'o', 'u', 'y']
+    random_selection = random.choice(vowel)
+    return random_selection
+
+
+def generate_consonant():
+    """
+    Generate a random consonant.
+    :return: a random consonant character
+    """
+    consonant = ['b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'v', 'w', 'x', 'z']
+    random_selection = random.choice(consonant)
+    return random_selection
+
+
+def generate_syllable():
+    """
+    Generate a random syllable.
+    :return: a random syllable as a concatenated string
+    """
+    vowel = generate_vowel()
+    consonant = generate_consonant()
+    syllable = consonant + vowel
+    return syllable
 
 
 def print_character(character):
@@ -167,35 +204,43 @@ def print_character(character):
     i: 8
     j: 0
     """
-    if len(character) == 11:
-        print(f"Name: {character['Name']}")
-        print(f"Race: {character['Race']}")
-        print(f"Class: {character['Class']}")
-        print(f"HP: {character['HP'][1]}/{character['HP'][0]}")
-        print(f"Strength: {character['Strength']}")
-        print(f"Dexterity: {character['Dexterity']}")
-        print(f"Constitution: {character['Constitution']}")
-        print(f"Intelligence: {character['Intelligence']}")
-        print(f"Wisdom: {character['Wisdom']}")
-        print(f"Charisma: {character['Charisma']}")
-        print(f"Experience: {character['XP']}")
-    elif len(character) == 12:
-        print(f"Name: {character['Name']}")
-        print(f"Race: {character['Race']}")
-        print(f"Class: {character['Class']}")
-        print(f"HP: {character['HP'][1]}/{character['HP'][0]}")
-        print(f"Strength: {character['Strength']}")
-        print(f"Dexterity: {character['Dexterity']}")
-        print(f"Constitution: {character['Constitution']}")
-        print(f"Intelligence: {character['Intelligence']}")
-        print(f"Wisdom: {character['Wisdom']}")
-        print(f"Charisma: {character['Charisma']}")
-        print(f"Experience: {character['XP']}")
-        print("--Here are your inventory items--")
+    attributes = ['Name', 'Race', 'Class', 'HP', 'Strength', 'Dexterity', 'Constitution', 'Intelligence', 'Wisdom', 'Charisma', 'XP', 'Inventory']
+    for index in range(0, len(attributes)):
+        print(f"{attributes[index]}: {character[attributes[index]]}")
+
+    if len(character['Inventory']) == 11:
+        for index in range(0, len(attributes) - 2):
+            print(f"{attributes[index]}: {character[attributes[index]]}")
+        # print(f"Name: {character['Name']}")
+        # print(f"Race: {character['Race']}")
+        # print(f"Class: {character['Class']}")
+        # print(f"HP: {character['HP'][1]}/{character['HP'][0]}")
+        # print(f"Strength: {character['Strength']}")
+        # print(f"Dexterity: {character['Dexterity']}")
+        # print(f"Constitution: {character['Constitution']}")
+        # print(f"Intelligence: {character['Intelligence']}")
+        # print(f"Wisdom: {character['Wisdom']}")
+        # print(f"Charisma: {character['Charisma']}")
+        # print(f"Experience: {character['XP']}")
+    elif len(character['Inventory']) > 0:
+        for index in range(0, len(attributes) - 2):
+            print(f"{attributes[index]}: {character[attributes[index]]}")
+        # print(f"Name: {character['Name']}")
+        # print(f"Race: {character['Race']}")
+        # print(f"Class: {character['Class']}")
+        # print(f"HP: {character['HP'][1]}/{character['HP'][0]}")
+        # print(f"Strength: {character['Strength']}")
+        # print(f"Dexterity: {character['Dexterity']}")
+        # print(f"Constitution: {character['Constitution']}")
+        # print(f"Intelligence: {character['Intelligence']}")
+        # print(f"Wisdom: {character['Wisdom']}")
+        # print(f"Charisma: {character['Charisma']}")
+        # print(f"Experience: {character['XP']}")
+        # print("--Here are your inventory items--")
         for length in range(0, len(character['Inventory'])):
             print(character['Inventory'][length])
 
-    else:
+    elif len(character) != 12:
         print("Warning: Error found with your list of character attributes")
 
 
@@ -246,32 +291,37 @@ def combat_round(opponent_one, opponent_two):
     if roll_opponent_one > roll_opponent_two:
         print(f"{opponent_one['Name']} will attack first.")
         attack_roll_one = roll_die(1, 20)
-        print(f"{opponent_one['Name']} has attack with {attack_roll_one} towards {opponent_two['Name']}")
+        print(f"{opponent_one['Name']} will attack with {attack_roll_one} towards {opponent_two['Name']}")
         if attack_roll_one > opponent_two['Dexterity']:
-            print(f"{opponent_one['Name']} has won")
+            print(f"{opponent_two['Name']} has fallen. {opponent_one['Name']} has won!")
         else:
-            print(f"{opponent_two['Name']} has countered the attack.")
+            print(f"{opponent_two['Name']} has countered the attack!")
     elif roll_opponent_one < roll_opponent_two:
         print(f"{opponent_two['Name']} will attack first.")
         attack_roll_two = roll_die(1, 20)
-        print(f"{opponent_two['Name']} has attack with {attack_roll_two} towards {opponent_one['Name']}")
+        print(f"{opponent_two['Name']} will attack with {attack_roll_two} towards {opponent_one['Name']}")
         if attack_roll_two > opponent_one['Dexterity']:
-            print(f"{opponent_two['Name']} has won")
+            print(f"{opponent_one['Name']} has fallen. {opponent_two['Name']} has won!")
         else:
-            print(f"{opponent_one['Name']} has countered the attack.")
+            print(f"{opponent_one['Name']} has countered the attack!")
 
 
 if __name__ == '__main__':
     # doctest.testmod()
     # print(select_race())
 
-    # new_character = create_character()
-    # print_character(new_character)
-    # test = choose_inventory()
-    # new_character["Inventory"] = test
-    # print_character(new_character)
+    new_character = create_character()
+    print_character(new_character)
+    test = choose_inventory()
+    new_character["Inventory"] = test
+    print_character(new_character)
 
-    combat_round({'Name': 'Katherine', 'Race': 'gnome', 'Class': 'druid', 'HP': [4, 4], 'Strength': 12, 'Dexterity': 6, 'Constitution': 15, 'Intelligence': 13, 'Wisdom': 5, 'Charisma': 8, 'XP': 0},
-                  {'Name': 'Marlon', 'Race': 'gnome', 'Class': 'druid', 'HP': [4, 4], 'Strength': 12, 'Dexterity': 6,
-                   'Constitution': 15, 'Intelligence': 13, 'Wisdom': 5, 'Charisma': 8, 'XP': 0})
+    # combat_round({'Name': 'Katherine', 'Race': 'gnome', 'Class': 'druid', 'HP': [4, 4], 'Strength': 12, 'Dexterity': 10, 'Constitution': 15, 'Intelligence': 13, 'Wisdom': 5, 'Charisma': 8, 'XP': 0},
+    #               {'Name': 'Marlon', 'Race': 'gnome', 'Class': 'druid', 'HP': [4, 4], 'Strength': 12, 'Dexterity': 14,
+    #                'Constitution': 15, 'Intelligence': 13, 'Wisdom': 5, 'Charisma': 8, 'XP': 0})
 
+    # character = {'Name': get_character_name(6), 'Race': 'gnome', 'Class': 'druid', 'HP': [4, 4], 'Strength': 12, 'Dexterity': 10, 'Constitution': 15, 'Intelligence': 13, 'Wisdom': 5, 'Charisma': 8, 'XP': 0}
+    # attributes = ['Name', 'Race', 'Class', 'HP', 'Strength', 'Dexterity', 'Constitution', 'Intelligence', 'Wisdom',
+    #               'Race', 'Charisma', 'XP']
+    # for index in range(0, len(attributes)):
+    #     print(f"{attributes[index]}: {character[attributes[index]]}")
