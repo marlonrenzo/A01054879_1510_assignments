@@ -80,25 +80,6 @@ def choose_inventory():
             print("Invalid entry. Please select from the available items (by number).\n")
 
 
-
-
-
-
-    # if inventory == [] and selection == 0:
-    #     return []
-    # elif selection < 0:
-    #     print("Warning: Your selection of items for inventory items is a negative number.")
-    #     return []
-    # elif selection > (len(inventory)):
-    #     print("Warning: Your Selection of items for inventory items is a larger than the amount items available.")
-    #     sorted_inventory = sorted(inventory)
-    #     return sorted_inventory
-    # else:
-    #     random_selection = random.sample(inventory, selection)
-    #     random_selection.sort()
-    #     return random_selection
-
-
 def create_character():
     """
     Create a dictionary including attributes to associate to a character.
@@ -192,17 +173,21 @@ def print_character(character):
         print(f"Wisdom: {character['Wisdom']}")
         print(f"Charisma: {character['Charisma']}")
         print(f"Experience: {character['XP']}")
-    # elif len(character) == 12:
-    #     print(f"Name: {character[0]}")
-    #     print(f"{character[1][0]}: {character[1][1]}")
-    #     print(f"{character[2][0]}: {character[2][1]}")
-    #     print(f"{character[3][0]}: {character[3][1]}")
-    #     print(f"{character[4][0]}: {character[4][1]}")
-    #     print(f"{character[5][0]}: {character[5][1]}")
-    #     print(f"{character[6][0]}: {character[6][1]}")
-    #     print("--Here are your inventory items--")
-    #     for length in range(0, len(character[7])):
-    #         print(character[7][length])
+    elif len(character) == 12:
+        print(f"Name: {character['Name']}")
+        print(f"Race: {character['Race']}")
+        print(f"Class: {character['Class']}")
+        print(f"HP: {character['HP'][1]}/{character['HP'][0]}")
+        print(f"Strength: {character['Strength']}")
+        print(f"Dexterity: {character['Dexterity']}")
+        print(f"Constitution: {character['Constitution']}")
+        print(f"Intelligence: {character['Intelligence']}")
+        print(f"Wisdom: {character['Wisdom']}")
+        print(f"Charisma: {character['Charisma']}")
+        print(f"Experience: {character['XP']}")
+        print("--Here are your inventory items--")
+        for length in range(0, len(character['Inventory'])):
+            print(character['Inventory'][length])
 
     else:
         print("Warning: Error found with your list of character attributes")
@@ -255,4 +240,6 @@ if __name__ == '__main__':
     # print(select_race())
     new_character = create_character()
     print_character(new_character)
-    print(choose_inventory())
+    test = choose_inventory()
+    new_character["Inventory"] = test
+    print_character(new_character)
