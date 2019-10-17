@@ -44,13 +44,13 @@ def choose_inventory():
     ['first', 'second', 'third']
     """
     shop_items = {1: 'sword', 2: 'dagger', 3: 'battleaxe', 4: 'spear', 5: 'quarterstaff', 6: 'shield', 7: 'potion '}
-    shop_items_sold = shop_items
+    shop_items_sold = shop_items.copy()
     item_selection = 0
     items = []
     print("\n -----Welcome to the Olde Tyme Merchant!-----\n\nHere is what we have for sale:\n")
     while item_selection != -1 and len(shop_items) > 0:
         for x in range(1, 8):
-            print(f"{x}. {shop_items[x]}")
+            print(f"{x}. {shop_items_sold[x]}")
         item_selection = int(input("Enter the number of the item you would like to buy (-1 to finish shopping)\n"))
         if 7 >= item_selection > 0:
             item = shop_items[item_selection]
@@ -276,14 +276,17 @@ if __name__ == '__main__':
 
     # new_character = create_character()
     # print_character(new_character)
-    test = choose_inventory()
-    print(test)
+    # test = choose_inventory()
+    # print(test)
+
     # new_character["Inventory"] = test
     # print_character(new_character)
 
     # combat_round({'Name': 'Katherine', 'Race': 'gnome', 'Class': 'druid', 'HP': [4, 4], 'Strength': 12, 'Dexterity': 10, 'Constitution': 15, 'Intelligence': 13, 'Wisdom': 5, 'Charisma': 8, 'XP': 0},
     #               {'Name': 'Marlon', 'Race': 'gnome', 'Class': 'druid', 'HP': [4, 4], 'Strength': 12, 'Dexterity': 14,
     #                'Constitution': 15, 'Intelligence': 13, 'Wisdom': 5, 'Charisma': 8, 'XP': 0})
+
+
 
     # character = {'Name': get_character_name(6), 'Race': 'gnome', 'Class': 'druid', 'HP': [4, 4], 'Strength': 12, 'Dexterity': 10, 'Constitution': 15, 'Intelligence': 13, 'Wisdom': 5, 'Charisma': 8, 'XP': 0}
     # attributes = ['Name', 'Race', 'Class', 'HP', 'Strength', 'Dexterity', 'Constitution', 'Intelligence', 'Wisdom',
