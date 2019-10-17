@@ -26,22 +26,10 @@ def choose_inventory():
     """
     Select items from inventory and place into a list.
 
-    Check all cases ranging from empty lists, 0 selections or negative selections and print a warning for these cases.
+    User will be asked for input for the available items.
 
-    :precondition: selection must be a positive integer less than or equal to the length of inventory
-    :precondition: inventory must not be an empty list
-    :post condition: a sorted list with selected items, the length of the list depends on the value of selections
-    :param inventory: a list with items to select from
-    :param selection: an integer for the number of selections from the list
-    :return: a sorted list
-    >>> choose_inventory([],0)
-    []
-    >>> choose_inventory(['One'],-1)
-    Warning: Your selection of items for inventory items is a negative number.
-    []
-    >>> choose_inventory(['first','second','third'],4)
-    Warning: Your Selection of items for inventory items is a larger than the amount items available.
-    ['first', 'second', 'third']
+    Will show items sold, will stop asking for input when user enters (-1) or if the shop runs out of items.
+    :return: a list
     """
     shop_items = {1: 'sword', 2: 'dagger', 3: 'battleaxe', 4: 'spear', 5: 'quarterstaff', 6: 'shield', 7: 'potion '}
     shop_items_sold = shop_items.copy()
@@ -61,12 +49,11 @@ def choose_inventory():
             item_selection = -1
         else:
             print("Invalid entry. Please select from the available items (by number).\n")
-
     print("Thank you for shopping, here are your items.")
     return items
 
 
-def create_character():
+def create_character(name_length):
     """
     Create a dictionary including attributes to associate to a character.
 
@@ -75,10 +62,10 @@ def create_character():
     """
     char_class = select_class()
     hp = roll_hp(char_class)
-    character = {'Name': get_character_name(4), 'Race': select_race(), 'Class': char_class, 'HP': [hp, hp],
+    character = {'Name': get_character_name(name_length//2), 'Race': select_race(), 'Class': char_class, 'HP': [hp, hp],
                  'Strength': roll_die(3, 6), 'Dexterity': roll_die(3, 6), 'Constitution': roll_die(3, 6),
                  'Intelligence': roll_die(3, 6), 'Wisdom': roll_die(3, 6), 'Charisma': roll_die(3, 6),
-                 'XP': 0, 'Inventory': ['hey', 'you']}
+                 'XP': 0, 'Inventory': []}
     return character
 
 
@@ -186,9 +173,6 @@ def print_character(character):
     j: 0
     """
     attributes = ['Name', 'Race', 'Class', 'HP', 'Strength', 'Dexterity', 'Constitution', 'Intelligence', 'Wisdom', 'Charisma', 'XP', 'Inventory']
-    # for index in range(0, len(attributes)):
-    #     print(f"{attributes[index]}: {character[attributes[index]]}")
-
     if character['Inventory'] == []:
         for index in range(0, len(attributes) - 1):
             print(f"{attributes[index]}: {character[attributes[index]]}")
@@ -242,6 +226,16 @@ def select_class():
 
 
 def combat_round(opponent_one, opponent_two):
+    """
+    Simulate a round of combat between two created characters.
+
+    Call attack function to simulate an attack.
+
+    Print the outcome of the round.
+    :precondition: both parameters must be properly formatted character dictionaries
+    :param opponent_one: a dictionary with character information
+    :param opponent_two: a dictionary with character information
+    """
     roll_opponent_one = 0
     roll_opponent_two = 0
     while roll_opponent_one == roll_opponent_two:
@@ -249,53 +243,50 @@ def combat_round(opponent_one, opponent_two):
         roll_opponent_two = roll_die(1, 20)
     if roll_opponent_one > roll_opponent_two:
         opponent_two['HP'][1] = attack(opponent_one, opponent_two)
+        if opponent_two['HP'][1] > 0:
+            attack(opponent_two, opponent_one)
 
     elif roll_opponent_one < roll_opponent_two:
-        opponent_two['HP'][1] = attack(opponent_two, opponent_one)
+        opponent_one['HP'][1] = attack(opponent_two, opponent_one)
+        if opponent_one['HP'][1] > 0:
+            attack(opponent_one, opponent_two)
 
 
 def attack(first_attacker, second_attacker):
-    print(f"{first_attacker['Name']} will attack first.")
+    """
+    Simulate an attack between two opponents.
+    :param first_attacker: a dictionary with character information
+    :param second_attacker: a dictionary with character information
+    :return: the outcome of the attack
+    """
+    print(f"{first_attacker['Name']} will attack.")
     print("They are now rolling the die.....")
     attack_roll_one = roll_die(1, 20)
     print(f"{first_attacker['Name']} will attack {second_attacker['Name']} with {attack_roll_one} damage!")
-    current_hp = second_attacker['HP'][1] - attack_roll_one
     if attack_roll_one > second_attacker['Dexterity']:
-        print(f"{second_attacker['Name']} has taken damage. {second_attacker['Name']} now has {current_hp}")
-        return second_attacker['HP'][1]
-    else:
         current_hp = second_attacker['HP'][1] - attack_roll_one
-        print(f"{second_attacker['Name']} takes the blow! {second_attacker['Name']} now has {current_hp}")
-        return current_hp
-
+        if current_hp > 0:
+            print(f"{second_attacker['Name']} anticipated the attack! {second_attacker['Name']} now has {current_hp}HP")
+            return current_hp
+        if current_hp <= 0:
+            print(f"{second_attacker['Name']} was killed in battle")
+            return current_hp
+    elif attack_roll_one < second_attacker['Dexterity']:
+        print(f"It missed! {second_attacker['Name']} anticipated the attack!")
+        return second_attacker['HP'][1]
 
 
 if __name__ == '__main__':
     # doctest.testmod()
     # print(select_race())
 
-    # new_character = create_character()
+    # new_character = create_character(8)
     # print_character(new_character)
     # test = choose_inventory()
     # print(test)
 
-    # new_character["Inventory"] = test
+    # new_character_one["Inventory"] = test
     # print_character(new_character)
 
-    # combat_round({'Name': 'Katherine', 'Race': 'gnome', 'Class': 'druid', 'HP': [4, 4], 'Strength': 12, 'Dexterity': 10, 'Constitution': 15, 'Intelligence': 13, 'Wisdom': 5, 'Charisma': 8, 'XP': 0},
-    #               {'Name': 'Marlon', 'Race': 'gnome', 'Class': 'druid', 'HP': [4, 4], 'Strength': 12, 'Dexterity': 14,
-    #                'Constitution': 15, 'Intelligence': 13, 'Wisdom': 5, 'Charisma': 8, 'XP': 0})
+    combat_round(create_character(8), create_character(8))
 
-
-
-    # character = {'Name': get_character_name(6), 'Race': 'gnome', 'Class': 'druid', 'HP': [4, 4], 'Strength': 12, 'Dexterity': 10, 'Constitution': 15, 'Intelligence': 13, 'Wisdom': 5, 'Charisma': 8, 'XP': 0}
-    # attributes = ['Name', 'Race', 'Class', 'HP', 'Strength', 'Dexterity', 'Constitution', 'Intelligence', 'Wisdom',
-    #               'Race', 'Charisma', 'XP']
-    # for index in range(0, len(attributes)):
-    #     print(f"{attributes[index]}: {character[attributes[index]]}")
-
-
-    # test = {1: 'sword', 2: 'dagger'}
-    # number = 2 / 1
-    # del test[number]
-    # print(test)
