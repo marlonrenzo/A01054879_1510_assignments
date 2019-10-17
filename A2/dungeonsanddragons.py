@@ -29,7 +29,7 @@ def choose_inventory():
     User will be asked for input for the available items.
 
     Will show items sold, will stop asking for input when user enters (-1) or if the shop runs out of items.
-    :return: a list
+    :return: a list of user-selected items
     """
     shop_items = {1: 'sword', 2: 'dagger', 3: 'battleaxe', 4: 'spear', 5: 'quarterstaff', 6: 'shield', 7: 'potion '}
     shop_items_sold = shop_items.copy()
@@ -45,7 +45,7 @@ def choose_inventory():
             del shop_items[item_selection]
             items.append(item)
             shop_items_sold[item_selection] = 'Sold'
-        elif len(shop_items) == 0:
+        elif len(shop_items) == 0 or item_selection == -1:
             item_selection = -1
         else:
             print("Invalid entry. Please select from the available items (by number).\n")
@@ -78,16 +78,14 @@ def roll_hp(character_class):
     :param character_class: the character's class as a string
     :return: a random number as an integer
     """
-    if character_class == 'barbarian':
-        return roll_die(1, 12)
-    elif character_class == 'bard' or 'cleric' or 'druid' or 'monk' or 'rogue' or 'warlock':
-        return roll_die(1, 8)
-    elif character_class == 'fighter' or 'paladin' or 'ranger':
-        return roll_die(1, 10)
-    elif character_class == 'sorcerer' or 'wizard':
-        return roll_die(1, 6)
+    dict_of_classes = {'barbarian': roll_die(1, 12), 'bard': roll_die(1, 8), 'cleric': roll_die(1, 8),
+                       'druid': roll_die(1, 8), 'monk': roll_die(1, 8), 'rogue': roll_die(1, 8), 'warlock': roll_die(1, 8),
+                       'fighter': roll_die(1, 10), 'paladin': roll_die(1, 10), 'ranger': roll_die(1, 10),
+                       'sorcerer': roll_die(1, 6), 'wizard': roll_die(1, 6)}
+    if character_class in dict_of_classes:
+        return dict_of_classes[character_class]
     else:
-        return 'Error'
+        return 'Error in inputted class.'
 
 
 def get_character_name(syllables):
@@ -147,36 +145,27 @@ def print_character(character):
     :post condition: will print all the attributes in a legible way
     :param character: a list with all character attributes
     :return: formatted string with all character attributes
-    >>> print_character({'Name': 'Hi', 'a': 'dwarf', 'b': 'cleric', 'c': [7, 7], 'd': 7, 'e': 11, 'f': 10, 'g': 10, 'h': 16, 'i': 8, 'j': 0})
-    Name: Hi
-    a: dwarf
-    b: cleric
-    c: 7/7
-    d: 7
-    e: 11
-    f: 10
-    g: 10
-    h: 16
-    i: 8
-    j: 0
-    >>> print_character({'Name': 'Hi', 'a': 'dwarf', 'b': 'cleric', 'c': [7, 7], 'd': 7, 'e': 11, 'f': 10, 'g': 10, 'h': 16, 'i': 8, 'j': 0})
-    Name: Hi
-    a: dwarf
-    b: cleric
-    c: 7/7
-    d: 7
-    e: 11
-    f: 10
-    g: 10
-    h: 16
-    i: 8
-    j: 0
+    >>> print_character({'Name': 'Qumerate', 'Race': 'gnome', 'Class': 'monk', 'HP': [5, 5], 'Strength': 11, 'Dexterity': 12, 'Constitution': 10, 'Intelligence': 11, 'Wisdom': 10, 'Charisma': 13, 'XP': 0, 'Inventory': ['Hello','World']})
+    Name: Qumerate
+    Race: gnome
+    Class: monk
+    HP: [5, 5]
+    Strength: 11
+    Dexterity: 12
+    Constitution: 10
+    Intelligence: 11
+    Wisdom: 10
+    Charisma: 13
+    XP: 0
+    Here are your items:
+    Hello
+    World
     """
     attributes = ['Name', 'Race', 'Class', 'HP', 'Strength', 'Dexterity', 'Constitution', 'Intelligence', 'Wisdom', 'Charisma', 'XP', 'Inventory']
     if character['Inventory'] == []:
         for index in range(0, len(attributes) - 1):
             print(f"{attributes[index]}: {character[attributes[index]]}")
-    elif len(character['Inventory']) > 0:
+    elif 7 > len(character['Inventory']) > 0:
         for index in range(0, len(attributes) - 1):
             print(f"{attributes[index]}: {character[attributes[index]]}")
 
@@ -236,6 +225,7 @@ def combat_round(opponent_one, opponent_two):
     :param opponent_one: a dictionary with character information
     :param opponent_two: a dictionary with character information
     """
+    print(f"\nA battle is ensues between two warriors, {opponent_one['Name']} the {opponent_one['Class']} and {opponent_two['Name']} the {opponent_two['Class']}...\n\n")
     roll_opponent_one = 0
     roll_opponent_two = 0
     while roll_opponent_one == roll_opponent_two:
@@ -255,6 +245,7 @@ def combat_round(opponent_one, opponent_two):
 def attack(first_attacker, second_attacker):
     """
     Simulate an attack between two opponents.
+
     :param first_attacker: a dictionary with character information
     :param second_attacker: a dictionary with character information
     :return: the outcome of the attack
@@ -269,7 +260,7 @@ def attack(first_attacker, second_attacker):
             print(f"{second_attacker['Name']} anticipated the attack! {second_attacker['Name']} now has {current_hp}HP")
             return current_hp
         if current_hp <= 0:
-            print(f"{second_attacker['Name']} was killed in battle")
+            print(f"{second_attacker['Name']} was slain in battle! His name will be remembered.")
             return current_hp
     elif attack_roll_one < second_attacker['Dexterity']:
         print(f"It missed! {second_attacker['Name']} anticipated the attack!")
@@ -277,16 +268,22 @@ def attack(first_attacker, second_attacker):
 
 
 if __name__ == '__main__':
-    # doctest.testmod()
-    # print(select_race())
+    doctest.testmod()
 
-    # new_character = create_character(8)
-    # print_character(new_character)
+    # new_character_one = create_character(8)
+    # print(new_character_one)
+    # print_character(new_character_one)
     # test = choose_inventory()
     # print(test)
 
-    # new_character_one["Inventory"] = test
-    # print_character(new_character)
 
-    combat_round(create_character(8), create_character(8))
+    # new_character_two = create_character(8)
+    # print_character(new_character_two)
+    # test = choose_inventory()
+    # print(test)
+    # combat_round(new_character_one, new_character_two)
+    print_character(
+        {'Name': 'Qumerate', 'Race': 'gnome', 'Class': 'monk', 'HP': [5, 5], 'Strength': 11, 'Dexterity': 12,
+         'Constitution': 10, 'Intelligence': 11, 'Wisdom': 10, 'Charisma': 13, 'XP': 0,
+         'Inventory': ['Hello', 'World']})
 
