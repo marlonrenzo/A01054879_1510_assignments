@@ -28,27 +28,24 @@ def choose_inventory():
 
     User will be asked for input for the available items.
 
-    Will show items sold, will stop asking for input when user enters (-1) or if the shop runs out of items.
     :return: a list of user-selected items
     """
     shop_items = {1: 'sword', 2: 'dagger', 3: 'battleaxe', 4: 'spear', 5: 'quarterstaff', 6: 'shield', 7: 'potion '}
-    shop_items_sold = shop_items.copy()
     item_selection = 0
     items = []
     print("\n -----Welcome to the Olde Tyme Merchant!-----\n\nHere is what we have for sale:\n")
-    while item_selection != -1 and len(shop_items) > 0:
+    while item_selection != -1:
         for x in range(1, 8):
-            print(f"{x}. {shop_items_sold[x]}")
+            print(f"{x}. {shop_items[x]}")
         item_selection = int(input("Enter the number of the item you would like to buy (-1 to finish shopping)\n"))
         if 7 >= item_selection > 0:
             item = shop_items[item_selection]
-            del shop_items[item_selection]
             items.append(item)
-            shop_items_sold[item_selection] = 'Sold'
-        elif len(shop_items) == 0 or item_selection == -1:
-            item_selection = -1
+        elif item_selection == -1:
+            continue
         else:
             print("Invalid entry. Please select from the available items (by number).\n")
+
     print("Thank you for shopping, here are your items.")
     return items
 
@@ -273,17 +270,15 @@ if __name__ == '__main__':
     # new_character_one = create_character(8)
     # print(new_character_one)
     # print_character(new_character_one)
-    # test = choose_inventory()
-    # print(test)
-
-
+    test = choose_inventory()
+    print(test)
     # new_character_two = create_character(8)
     # print_character(new_character_two)
     # test = choose_inventory()
     # print(test)
     # combat_round(new_character_one, new_character_two)
-    print_character(
-        {'Name': 'Qumerate', 'Race': 'gnome', 'Class': 'monk', 'HP': [5, 5], 'Strength': 11, 'Dexterity': 12,
-         'Constitution': 10, 'Intelligence': 11, 'Wisdom': 10, 'Charisma': 13, 'XP': 0,
-         'Inventory': ['Hello', 'World']})
+    # print_character(
+    #     {'Name': 'Qumerate', 'Race': 'gnome', 'Class': 'monk', 'HP': [5, 5], 'Strength': 11, 'Dexterity': 12,
+    #      'Constitution': 10, 'Intelligence': 11, 'Wisdom': 10, 'Charisma': 13, 'XP': 0,
+    #      'Inventory': ['Hello', 'World']})
 
