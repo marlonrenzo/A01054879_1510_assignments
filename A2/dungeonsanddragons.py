@@ -162,7 +162,7 @@ def print_character(character):
     if character['Inventory'] == []:
         for index in range(0, len(attributes) - 1):
             print(f"{attributes[index]}: {character[attributes[index]]}")
-    elif 7 > len(character['Inventory']) > 0:
+    elif len(character['Inventory']) > 0:
         for index in range(0, len(attributes) - 1):
             print(f"{attributes[index]}: {character[attributes[index]]}")
 
