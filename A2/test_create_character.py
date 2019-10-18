@@ -23,3 +23,5 @@ class TestCreateCharacter(TestCase):
         inventory = actual_value['Inventory']
         expected_value = []
         self.assertEqual(inventory, expected_value)
+
+
