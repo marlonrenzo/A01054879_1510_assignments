@@ -46,7 +46,7 @@ def choose_inventory():
         else:
             print("Invalid entry. Please select from the available items (by number).\n")
 
-    print("Thank you for shopping, here are your items.")
+    print("Thank you for shopping.")
     return items
 
 
@@ -58,11 +58,10 @@ def create_character(name_length):
     :return: the information of a character as a dictionary
     """
     char_class = select_class()
-    hp = roll_hp(char_class)
-    character = {'Name': get_character_name(name_length//2), 'Race': select_race(), 'Class': char_class, 'HP': [hp, hp],
-                 'Strength': roll_die(3, 6), 'Dexterity': roll_die(3, 6), 'Constitution': roll_die(3, 6),
-                 'Intelligence': roll_die(3, 6), 'Wisdom': roll_die(3, 6), 'Charisma': roll_die(3, 6),
-                 'XP': 0, 'Inventory': []}
+    character = {'Name': get_character_name(name_length//2), 'Race': select_race(), 'Class': char_class,
+                 'HP': [roll_hp(char_class), roll_hp(char_class)], 'Strength': roll_die(3, 6),
+                 'Dexterity': roll_die(3, 6), 'Constitution': roll_die(3, 6),'Intelligence': roll_die(3, 6),
+                 'Wisdom': roll_die(3, 6), 'Charisma': roll_die(3, 6), 'XP': 0, 'Inventory': []}
     return character
 
 
@@ -222,63 +221,80 @@ def combat_round(opponent_one, opponent_two):
     :param opponent_one: a dictionary with character information
     :param opponent_two: a dictionary with character information
     """
-    print(f"\nA battle is ensues between two warriors, {opponent_one['Name']} the {opponent_one['Class']} and {opponent_two['Name']} the {opponent_two['Class']}...\n\n")
+    print(f"\nA battle is ensues between two warriors, {opponent_one['Name']} the {opponent_one['Class']} and {opponent_two['Name']} the {opponent_two['Class']}...")
+    print(f"The {opponent_one['Class']} lets out a war cry: \'ONE SHALL STAND, ONE SHALL FALL!\' ")
     roll_opponent_one = 0
     roll_opponent_two = 0
     while roll_opponent_one == roll_opponent_two:
-        roll_opponent_one = roll_die(1,20)
+        roll_opponent_one = roll_die(1, 20)
         roll_opponent_two = roll_die(1, 20)
     if roll_opponent_one > roll_opponent_two:
         opponent_two['HP'][1] = attack(opponent_one, opponent_two)
         if opponent_two['HP'][1] > 0:
-            attack(opponent_two, opponent_one)
-
+            opponent_one['HP'][1] = attack(opponent_two, opponent_one)
     elif roll_opponent_one < roll_opponent_two:
         opponent_one['HP'][1] = attack(opponent_two, opponent_one)
         if opponent_one['HP'][1] > 0:
-            attack(opponent_one, opponent_two)
+            opponent_two['HP'][1] = attack(opponent_one, opponent_two)
 
 
-def attack(first_attacker, second_attacker):
+def attack(attacker, recipient):
     """
     Simulate an attack between two opponents.
 
-    :param first_attacker: a dictionary with character information
-    :param second_attacker: a dictionary with character information
-    :return: the outcome of the attack
+    :param attacker: a dictionary with character information
+    :param recipient: a dictionary with character information
+    :return: the remaining hp o
     """
-    print(f"{first_attacker['Name']} will attack.")
-    print("They are now rolling the die.....")
+    print(f"{attacker['Name']} will attack.\nThey are now rolling the die.....")
     attack_roll_one = roll_die(1, 20)
-    print(f"{first_attacker['Name']} will attack {second_attacker['Name']} with {attack_roll_one} damage!")
-    if attack_roll_one > second_attacker['Dexterity']:
-        current_hp = second_attacker['HP'][1] - attack_roll_one
+    print(f"{attacker['Name']} will attack {recipient['Name']} with {attack_roll_one} damage!")
+    recipient['HP'][1] = check_dexterity(attack_roll_one, recipient)
+    return recipient['HP'][1]
+
+    # if attack_roll_one > recipient['Dexterity']:
+    #     current_hp = recipient['HP'][1] - attack_roll_one
+    #     if current_hp > 0:
+    #         print(f"{recipient['Name']} anticipated the attack! {recipient['Name']} now has {current_hp}HP")
+    #         return current_hp
+    #     if current_hp <= 0:
+    #         print(f"{recipient['Name']} was slain in battle! He had no chance to defend himself.")
+    #         return 0
+    # elif attack_roll_one < recipient['Dexterity']:
+    #     print(f"It missed! {recipient['Name']} anticipated the attack!")
+    #     return recipient['HP'][1]
+
+
+def check_dexterity(attack_roll, defender):
+    if attack_roll > defender['Dexterity']:
+        current_hp = defender['HP'][1] - attack_roll
         if current_hp > 0:
-            print(f"{second_attacker['Name']} anticipated the attack! {second_attacker['Name']} now has {current_hp}HP")
+            print(f"{defender['Name']} took the blow! Pain travels through his veins as he tries to collect himself. {defender['Name']} now has {current_hp}HP")
             return current_hp
         if current_hp <= 0:
-            print(f"{second_attacker['Name']} was slain in battle! His name will be remembered.")
-            return current_hp
-    elif attack_roll_one < second_attacker['Dexterity']:
-        print(f"It missed! {second_attacker['Name']} anticipated the attack!")
-        return second_attacker['HP'][1]
+            print(f"{defender['Name']} was slain in battle! He had no chance to defend himself.")
+            return 0
+    elif attack_roll < defender['Dexterity']:
+        print(f"It missed! {defender['Name']} anticipated the attack!")
+        return defender['HP'][1]
+
+
+def main():
+    doctest.testmod()
+    # Create first character
+    new_character_one = create_character(8)
+    print(new_character_one)
+    test = choose_inventory()
+    print(test)
+    print_character(new_character_one)
+    # Create second character
+    new_character_two = create_character(8)
+    test = choose_inventory()
+    print(test)
+    print_character(new_character_two)
+    # Pin the two characters against each other
+    combat_round(new_character_one, new_character_two)
 
 
 if __name__ == '__main__':
-    doctest.testmod()
-
-    # new_character_one = create_character(8)
-    # print(new_character_one)
-    # print_character(new_character_one)
-    test = choose_inventory()
-    print(test)
-    # new_character_two = create_character(8)
-    # print_character(new_character_two)
-    # test = choose_inventory()
-    # print(test)
-    # combat_round(new_character_one, new_character_two)
-    # print_character(
-    #     {'Name': 'Qumerate', 'Race': 'gnome', 'Class': 'monk', 'HP': [5, 5], 'Strength': 11, 'Dexterity': 12,
-    #      'Constitution': 10, 'Intelligence': 11, 'Wisdom': 10, 'Charisma': 13, 'XP': 0,
-    #      'Inventory': ['Hello', 'World']})
-
+    main()
