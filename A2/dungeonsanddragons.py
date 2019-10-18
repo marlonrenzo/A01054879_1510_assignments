@@ -58,8 +58,9 @@ def create_character(name_length):
     :return: the information of a character as a dictionary
     """
     char_class = select_class()
+    hp = roll_hp(char_class)
     character = {'Name': get_character_name(name_length//2), 'Race': select_race(), 'Class': char_class,
-                 'HP': [roll_hp(char_class), roll_hp(char_class)], 'Strength': roll_die(3, 6),
+                 'HP': [hp, hp], 'Strength': roll_die(3, 6),
                  'Dexterity': roll_die(3, 6), 'Constitution': roll_die(3, 6),'Intelligence': roll_die(3, 6),
                  'Wisdom': roll_die(3, 6), 'Charisma': roll_die(3, 6), 'XP': 0, 'Inventory': []}
     return character
@@ -248,8 +249,9 @@ def attack(attacker, recipient):
     """
     print(f"{attacker['Name']} will attack.\nThey are now rolling the die.....")
     attack_roll_one = roll_die(1, 20)
-    print(f"{attacker['Name']} will attack {recipient['Name']} with {attack_roll_one} damage!")
-    recipient['HP'][1] = check_dexterity(attack_roll_one, recipient)
+    attack_damage = roll_hp(attacker['Class'])
+    print(f"{attacker['Name']} will attack {recipient['Name']} with {attack_damage} damage!")
+    recipient['HP'][1] = check_dexterity(attack_roll_one, recipient, attack_damage)
     return recipient['HP'][1]
 
     # if attack_roll_one > recipient['Dexterity']:
@@ -265,9 +267,9 @@ def attack(attacker, recipient):
     #     return recipient['HP'][1]
 
 
-def check_dexterity(attack_roll, defender):
+def check_dexterity(attack_roll, defender, damage):
     if attack_roll > defender['Dexterity']:
-        current_hp = defender['HP'][1] - attack_roll
+        current_hp = defender['HP'][1] - damage
         if current_hp > 0:
             print(f"{defender['Name']} took the blow! Pain travels through his veins as he tries to collect himself. {defender['Name']} now has {current_hp}HP")
             return current_hp
