@@ -254,18 +254,6 @@ def attack(attacker, recipient):
     recipient['HP'][1] = check_dexterity(attack_roll_one, recipient, attack_damage)
     return recipient['HP'][1]
 
-    # if attack_roll_one > recipient['Dexterity']:
-    #     current_hp = recipient['HP'][1] - attack_roll_one
-    #     if current_hp > 0:
-    #         print(f"{recipient['Name']} anticipated the attack! {recipient['Name']} now has {current_hp}HP")
-    #         return current_hp
-    #     if current_hp <= 0:
-    #         print(f"{recipient['Name']} was slain in battle! He had no chance to defend himself.")
-    #         return 0
-    # elif attack_roll_one < recipient['Dexterity']:
-    #     print(f"It missed! {recipient['Name']} anticipated the attack!")
-    #     return recipient['HP'][1]
-
 
 def check_dexterity(attack_roll, defender, damage):
     if attack_roll > defender['Dexterity']:
