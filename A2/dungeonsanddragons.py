@@ -61,7 +61,7 @@ def create_character(name_length):
     hp = roll_hp(char_class)
     character = {'Name': get_character_name(name_length//2), 'Race': select_race(), 'Class': char_class,
                  'HP': [hp, hp], 'Strength': roll_die(3, 6),
-                 'Dexterity': roll_die(3, 6), 'Constitution': roll_die(3, 6),'Intelligence': roll_die(3, 6),
+                 'Dexterity': roll_die(3, 6), 'Constitution': roll_die(3, 6), 'Intelligence': roll_die(3, 6),
                  'Wisdom': roll_die(3, 6), 'Charisma': roll_die(3, 6), 'XP': 0, 'Inventory': []}
     return character
 
