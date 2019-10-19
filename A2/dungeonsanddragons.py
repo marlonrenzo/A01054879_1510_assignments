@@ -256,6 +256,15 @@ def attack(attacker, recipient):
 
 
 def check_dexterity(attack_roll, defender, damage):
+    """
+    Determine the outcome of an attack attempt depending on the magnitude of the defender's dexterity.\
+
+    :precondition:
+    :param attack_roll: an integer used to compare against a character's dexterity
+    :param defender: a dictionary that represents a character with an impending attack
+    :param damage: the amount of damage the defender will suffer if hit by the attack
+    :return: the current hp of the defender after an attack is performed
+    """
     if attack_roll > defender['Dexterity']:
         current_hp = defender['HP'][1] - damage
         if current_hp > 0:
@@ -275,12 +284,10 @@ def main():
     new_character_one = create_character(8)
     print(new_character_one)
     test = choose_inventory()
-    print(test)
     print_character(new_character_one)
     # Create second character
     new_character_two = create_character(8)
     test = choose_inventory()
-    print(test)
     print_character(new_character_two)
     # Pin the two characters against each other
     combat_round(new_character_one, new_character_two)
