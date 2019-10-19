@@ -57,6 +57,7 @@ def create_character(name_length):
     :post condition: will create a character as a dictionary of attributes
     :return: the information of a character as a dictionary
     """
+    print("\n\n\nLet's create a character\nStart by selecting a class.\n")
     char_class = select_class()
     hp = roll_hp(char_class)
     character = {'Name': get_character_name(name_length//2), 'Race': select_race(), 'Class': char_class,
