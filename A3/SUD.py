@@ -22,17 +22,17 @@ def roll_die(number_of_rolls, number_of_sides):
 
 
 def move(position, direction):
-    action = {"up": 1, "down": -1, "left": -1, "right": 1}
+    action = {"up": -1, "down": 1, "left": -1, "right": 1}
     if direction == "up" or direction == "down":
-        position["x-pos"] += action[direction]
-    elif direction == "right" or direction == "left":
         position["y-pos"] += action[direction]
+    elif direction == "right" or direction == "left":
+        position["x-pos"] += action[direction]
     return position
 
 
 def print_position(position):
     position_holder = ["[ ]", "[x]"]
-    for y_axis in range(4, -1, -1):
+    for y_axis in range(5):
         print("\n")
         for x_axis in range(5):
             print(position_holder[check_position(position, x_axis, y_axis)], end="")
@@ -45,8 +45,11 @@ def check_position(position, x_position, y_position):
         return 0
 
 
-def main():
-    position = {"x-pos": 0, "y-pos": 0}
+def startup():
+    print("")
+
+def run_game():
+    position = {"x-pos": 2, "y-pos": 2}
     while True:
         user_input = input("\nWhat do you want to do?")
         if user_input.lower() == "quit":
@@ -60,4 +63,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    run_game()
