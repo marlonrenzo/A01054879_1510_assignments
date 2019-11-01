@@ -46,15 +46,23 @@ def check_position(position, x_position, y_position):
 
 
 def startup():
-    print("")
+    print("""Welcome to the world of Kather.
+             Here you will embark on breathtaking adventures in the city of Quid!
+    """)
+
+
 
 def run_game():
+    startup()
     position = {"x-pos": 2, "y-pos": 2}
     while True:
         user_input = input("\nWhat do you want to do?")
         if user_input.lower() == "quit":
             print("Thanks for playing!")
             break
+        elif user_input.lower() == "help":
+            print("A few commands you can perform:\nUp, Down, Left or Right (Move)\nPosition (Shows your position)\n"
+                  "Quit (To qut the program)")
         elif user_input.lower() == "position":
             print_position(position)
         else:
