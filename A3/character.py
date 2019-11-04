@@ -21,5 +21,6 @@ def create_character():
           "of Kather to begin training. The Dungeon has 25 rooms for you to traverse through and eventually escape.\n"
           "Use your knowledge as a spell-caster and use any items you think are useful.\n\n"
           "Let's begin by getting to know you.........")
-    character = {'Name': get_character_name(), 'Class': 'Wizard', 'HP': [10, 10], 'Inventory': [], 'Spells': []}
+    character = {'Name': get_character_name(), 'Class': 'Wizard', 'HP': [10, 10], 'Inventory': [], 'Spells': [],
+                 'position': {"x-pos": 2, "y-pos": 2}}
     return character

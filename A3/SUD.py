@@ -1,4 +1,3 @@
-import random
 from A3.character import create_character
 
 
@@ -42,7 +41,7 @@ def print_position(position):
         for x_axis in range(5):
             # create the 5 columns each row
             # Print the correct place holder within place_holder by the output produced by check_position
-            print(place_holder[check_position(position, x_axis, y_axis)], end="")
+            print(place_holder[check_position(position, x_axis, y_axis)], end=" ")
     print("\n")
 
 
@@ -76,14 +75,13 @@ def startup():
 def run_game():
     character = create_character()
     startup()
-    position = {"x-pos": 2, "y-pos": 2}
     while True:
         actions = {0: ["Move", move], 1: ["Show position", print_position], 2: ["Quit"]}
         for x in actions.keys():
             print(f"{x}: {actions[x][0]}")
         user_action = int(input("\nWhat would you like to do?"))
         if 0 <= user_action <= 1:
-            actions[user_action][1](position)
+            actions[user_action][1](character["position"])
         elif user_action == 2:
             print("Thanks for playing!")
             break
