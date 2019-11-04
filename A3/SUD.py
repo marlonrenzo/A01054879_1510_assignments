@@ -5,22 +5,21 @@ def move(position):
     """
     Change the position of a character based on direction.
 
-    Use the direction to change the dictionary accordingly.
+    Use the direction inputted by the user to change the dictionary accordingly.
     :param position: a dictionary
-    :param direction: a string
     :precondition: position must be a dictionary
-    :precondition: direction must be a string
     :post condition: will return an updated dictionary
     :return: a dictionary
     """
     action = {"up": -1, "down": 1, "left": -1, "right": 1}
-    direction = input("What direction would you like to move? (up, down left or right)").lower()
-    if direction == "up" or direction == "down":
+    direction = input("What direction would you like to move? (up, down left or right)")
+    if (direction.lower() == "up" or direction.lower() == "down") and position["y-pos"] < 5:
         position["y-pos"] += action[direction]
-    elif direction == "right" or direction == "left":
+    elif (direction.lower() == "right" or direction.lower() == "left") and position["y-pos"] < 5:
         position["x-pos"] += action[direction]
     else:
         print("Invalid entry, please only move 'up', 'down', 'left', or 'right'")
+    print_position(position)
     return position
 
 
@@ -60,13 +59,12 @@ def check_position(position, x_position, y_position):
 
 
 def startup():
+    """
+    Print the startup scenario.
+    """
     print("You are awaken in a dark concrete room. Doors surround you on all sides.\n"
           "A trap door in the middle of the room protrudes the ceiling. It requires a key. \n"
           "You observe the empty room some more.\nWords scratched against the walls - 'ESCAPE'.\n")
-
-
-def help():
-    print("A few commands you can perform:\nUp, Down, Left or Right (Move)\nPosition (Shows your position)\n")
 
 
 def run_game():
@@ -87,11 +85,17 @@ def run_game():
         # else:
         #     position = move(position, user_input)
         #     print_position(position)
-        actions = {0: ["Move", move], 1: ["Show position", print_position]}
+        actions = {0: ["Move", move], 1: ["Show position", print_position], 2: ["Quit"]}
         for x in actions.keys():
             print(f"{x}: {actions[x][0]}")
         user_action = int(input("\nWhat would you like to do?"))
-        actions[user_action][1](position)
+        if 0 <= user_action <= 1:
+            actions[user_action][1](position)
+        elif user_action == 2:
+            print("Thanks for playing!")
+            break
+        else:
+            print("That was not a valid entry. Please try again.")
 
 
 if __name__ == "__main__":
