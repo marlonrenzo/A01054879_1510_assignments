@@ -1,4 +1,5 @@
 import random
+from A3.character import create_character
 
 
 def move(position):
@@ -67,29 +68,16 @@ def startup():
     """
     Print the startup scenario.
     """
-    print("You are awaken in a dark concrete room. Doors surround you on all sides.\n"
+    print("You are awoken in a dark concrete room. Doors surround you on all sides.\n"
           "A trap door in the middle of the room protrudes the ceiling. It requires a key. \n"
           "You observe the empty room some more.\nWords scratched against the walls - 'ESCAPE'.\n")
 
 
 def run_game():
-
+    character = create_character()
     startup()
     position = {"x-pos": 2, "y-pos": 2}
     while True:
-        # user_input = input("\nWhat do you want to do?")
-        # if user_input.lower() == "quit":
-        #     print("Thanks for playing!")
-        #     break
-        # elif user_input.lower() == "help":
-        #     print("A few commands you can perform:\nUp, Down, Left or Right (Move)\nPosition (Shows your position)\n"
-        #           "Quit (To qut the program)")
-        # elif user_input.lower() == "position":
-        #     print_position(position)
-        #     print("\n", position)
-        # else:
-        #     position = move(position, user_input)
-        #     print_position(position)
         actions = {0: ["Move", move], 1: ["Show position", print_position], 2: ["Quit"]}
         for x in actions.keys():
             print(f"{x}: {actions[x][0]}")
