@@ -28,15 +28,20 @@ def print_position(position):
     Show the current position based on the coordinates.
 
     Print out a 5x5 of squares[ ] and keep checking if the user is located at each square with check_position.
+
+    Use a nested loop; one loop to print each row, and the nested loop to print each column in each row.
     :param position: a dictionary
     :precondition: position must be a dictionary
     :post condition: will print the location of the user
     """
-    position_holder = ["[ ]", "[x]"]
+    place_holder = ["[ ]", "[x]"]
     for y_axis in range(5):
+        # create the 5 rows
         print("\n")
         for x_axis in range(5):
-            print(position_holder[check_position(position, x_axis, y_axis)], end="")
+            # create the 5 columns each row
+            # Print the correct place holder within place_holder by the output produced by check_position
+            print(place_holder[check_position(position, x_axis, y_axis)], end="")
     print("\n")
 
 
