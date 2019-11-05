@@ -22,5 +22,5 @@ def create_character():
           "Use your knowledge as a spell-caster and use any items you think are useful.\n\n"
           "Let's begin by getting to know you.........")
     character = {'Name': get_character_name(), 'Class': 'Wizard', 'HP': [10, 10], 'Inventory': [], 'Spells': [],
-                 'position': {"x-pos": 2, "y-pos": 2}}
+                 'position': {"x": 2, "y": 2}}
     return character
