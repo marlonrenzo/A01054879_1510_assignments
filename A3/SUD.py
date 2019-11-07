@@ -95,8 +95,8 @@ def get_move() -> int:
 
     :return: an int
     """
-    move = int(input("Where do you want to move?\n1: up\n2: down\n3: left\n4: right\n5: quit\n"))
-    return move
+    user_move = int(input("Where do you want to move?\n1: up\n2: down\n3: left\n4: right\n5: quit\n"))
+    return user_move
 
 
 def print_position(position):
@@ -111,11 +111,9 @@ def print_position(position):
     :post condition: will print the location of the user
     """
     place_holder = ["[ ]", "[x]"]
-    for y_axis in range(5):
-        # create the 5 rows
+    for y_axis in range(5): # create the 5 rows
         print("\n")
-        for x_axis in range(5):
-            # create the 5 columns each row
+        for x_axis in range(5): # create the 5 columns each row
             # Print the correct place holder within place_holder by the output produced by check_position
             print(place_holder[check_position(position, x_axis, y_axis)], end=" ")
     print("\n")
@@ -140,42 +138,69 @@ def check_position(position, x_position, y_position):
 
 
 def check_for_monster() -> bool:
-    encounter_chance = random.randint(0, 4)
+    """
+    Generate a random number between 1 and 4 exclusive, compare the random number to 2 and return a boolean.
+
+    Creates a 25% chance to encounter a monster.
+    :return: a boolean
+    """
+    encounter_chance = random.randint(1, 4)
     if encounter_chance == 2:
         return True
     else:
         return False
 
 
-# def battle(character, monster):
-#     while character["HP"] > 0 and monster["HP"] > 0:
-#         character["HP"][0] = combat_round(character, monster)
-#
-#
-# def combat_round(character, monster):
-#
-#     character_roll = [character, roll_die(1, 6)]
-#     monster_roll = [monster, roll_die(1, 6)]
-#     while character_roll[1] == monster_roll[1]:
-#         character_roll[1] = roll_die(1, 6)
-#         monster_roll[1] = roll_die(1, 6)
-#
-#     if character_roll > monster_roll:
-#         attack
-#     return character["HP"][0]
-#
-# def attack(attacker, recipient):
-#     """
-#     Simulate an attack between two opponents.
-#
-#     :param attacker: a dictionary with character information
-#     :param recipient: a dictionary with character information
-#     :return:
-#     """
-#     print(f"{attacker['Name']} will attack.\nNow rolling the die.....")
-#     attack_roll_one = roll_die(1, 6)
-#     print(f"{attacker['Name']} will attack {recipient['Name']} with {attack_roll_one} damage!")
-#     return recipient['HP'][1]
+def battle(character, monster):
+    rounds = 0
+    round_cases = ["A battle ensues. Tension rises. Prepare for blood and despair.", "The battle continues",
+                   "The battle continues", "The battle continues", "The battle continues"]
+    while character["HP"] > 0 and monster["HP"] > 0:
+        round += 1
+        print(round_cases[rounds])
+        remaining_health = combat_round(character, monster)
+        character['HP'][0] = remaining_health[0]
+        monster['HP'][0] = remaining_health[1]
+
+    return character['HP'][0]
+
+
+def combat_round(character, monster):
+
+    random_first_attacker = [[character, monster], [monster, character]]
+    random_number = random.randint(0, 1)
+    random_first_attacker[random_number][1]['HP'][1] = attack(random_first_attacker[random_number])
+    return [character["HP"][0], monster["HP"][0]]
+
+
+def attack(attacker: dict, recipient: dict) -> int:
+    """
+    Simulate an attack between two opponents.
+
+    :param attacker: a dictionary with character information
+    :param recipient: a dictionary with character information
+    :return: an int
+    """
+    attack_outcome = ["The attack was successful! The strike dealt significant damage!", "The attack missed!"]
+    random_outcome = random.randint(0, 1)  # choose a random outcome
+    print(f"{attacker['Alias']} will attack.\nNow rolling the die.....")
+    attack_roll = roll_die(1, 6)  # Determine the damage an attack deals
+    print(f"{attacker['Alias']} will attack {recipient['Alias']} with {attack_roll} damage!")
+    print(attack_outcome[random_outcome])  # prints the random outcome of an attack (hit or miss)
+    if not random_outcome:  # if attack is successful
+        remaining_hp = recipient['HP'][0] - attack_roll
+        print(f"The hit left {recipient['Alias']} with {remaining_hp}/{recipient['HP'][1]}")
+        return remaining_hp
+    else:
+        return recipient['HP'][0]  # original HP
+
+
+def check_alive(character):
+    if character['HP'][1] < 0:
+        print(f"As sad as it may be, {character['Name']} you have died and will flourish in the afterlife. "
+              f"Try playing again")
+    else:
+        return
 
 
 def startup():
@@ -187,23 +212,28 @@ def startup():
           "You observe the empty room some more.\nWords scratched against the walls - 'ESCAPE'.\n")
 
 
+def print_dictionary(dictionary: dict):
+    for x in dictionary.keys():
+        print(f"{x}: {dictionary[x][0]}")
+
+
 def run_game():
     character = create_character()
     startup()
     while True:
-        actions = {1: ["Move", move], 0: ["Quit"]}
+        actions = {1: "Move", 0: "Quit"}
         print_position(character["position"])
+        print_dictionary(actions)
 
-        for x in actions.keys():
-            print(f"{x}: {actions[x][0]}")
         user_action = int(input("\nWhat would you like to do?"))
         if user_action == 1:
             character["position"] = move(character["position"])
             monster_encounter = check_for_monster()
             if monster_encounter:
                 monster = new_monster()
-                # character["HP"][0] = battle(character, monster)
                 print(f"Monster appeared! It has HP of {monster['HP'][1]}")
+                character["HP"][0] = battle(character, monster)
+                check_alive(character)
         elif not user_action:
             print("Thanks for playing!")
             break
@@ -212,5 +242,10 @@ def run_game():
 
 
 if __name__ == "__main__":
-    run_game()
-
+    # run_game()
+    hp = attack({'Name': 'Marlon', 'Alias': 'You', 'Class': 'Wizard', 'HP': [10, 10], 'Inventory': [], 'Spells': [],
+                'position': {"x": 2, "y": 2}, "Attack Roll": 0},
+                {'Alias': "The Monster", 'HP': [5, 5], "Attack Roll": 0})
+    # a = {'Name': 'Marlon', 'Alias': 'You', 'Class': 'Wizard', 'HP': [10, 10], 'Inventory': [], 'Spells': [],
+    #  'position': {"x": 2, "y": 2}, "Attack Roll": 0}
+    # print(f"{a['Alias']}")
