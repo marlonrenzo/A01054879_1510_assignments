@@ -168,8 +168,10 @@ def combat_round(character, monster):
 
     attacks_first = [[character, monster], [monster, character]]  # generates cases where either of them attack first
     random_attacker = random.randint(0, 1)  # will determine which case to use in first_attacker
-    first_attacker = attacks_first[random_attacker]
-    first_attacker[1]['HP'][0] = attack(first_attacker[0], first_attacker[1])  # sets the hp of recipient to whatever attack returns
+    attacker = attacks_first[random_attacker]
+    attacker[1]['HP'][0] = attack(attacker[0], attacker[1])  # sets the hp of recipient to whatever attack returns
+    if check_alive(attacker[1]):
+        attacker[0]['HP'][0] = attack(attacker[1], attacker[0])
     return [character["HP"][0], monster["HP"][0]]
 
 
@@ -197,8 +199,8 @@ def attack(attacker: dict, recipient: dict) -> int:
 
 def check_alive(character):
     if character['HP'][1] < 0:
-        print(f"As sad as it may be, {character['Name']} you have died and will flourish in the afterlife. "
-              f"Try playing again")
+        # print(f"As sad as it may be {character['Name']}, you have died and will flourish in the afterlife. "
+        #       f"Try playing again")
         return False
     else:
         return True
@@ -215,7 +217,7 @@ def startup():
 
 def print_dictionary(dictionary: dict):
     for x in dictionary.keys():
-        print(f"{x}: {dictionary[x][0]}")
+        print(f"{x}: {dictionary[x]}")
 
 
 def run_game():
@@ -243,10 +245,10 @@ def run_game():
 
 
 if __name__ == "__main__":
-    # run_game()
-    print(battle({'Name': 'Marlon', 'Alias': 'You', 'Class': 'Wizard', 'HP': [10, 10], 'Inventory': [], 'Spells': [],
-                'position': {"x": 2, "y": 2}, "Attack Roll": 0},
-                {'Alias': "The Monster", 'HP': [5, 5], "Attack Roll": 0}))
+    run_game()
+    # print(battle({'Name': 'Marlon', 'Alias': 'You', 'Class': 'Wizard', 'HP': [10, 10], 'Inventory': [], 'Spells': [],
+    #             'position': {"x": 2, "y": 2}, "Attack Roll": 0},
+    #             {'Alias': "The Monster", 'HP': [5, 5], "Attack Roll": 0}))
 
     # a = {'Name': 'Marlon', 'Alias': 'You', 'Class': 'Wizard', 'HP': [10, 10], 'Inventory': [], 'Spells': [],
     #  'position': {"x": 2, "y": 2}, "Attack Roll": 0}
