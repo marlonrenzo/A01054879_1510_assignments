@@ -1,3 +1,3 @@
 def new_monster() -> dict:
-    monster = {'HP': [10, 10]}
+    monster = {'Alias:': "The Monster", 'HP': [5, 5]}
     return monster
