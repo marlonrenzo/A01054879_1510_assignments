@@ -170,8 +170,8 @@ def combat_round(character, monster):
     random_attacker = random.randint(0, 1)  # will determine which case to use in first_attacker
     attacker = attacks_first[random_attacker]
     attacker[1]['HP'][0] = attack(attacker[0], attacker[1])  # sets the hp of recipient to whatever attack returns
-    if check_alive(attacker[1]):
-        attacker[0]['HP'][0] = attack(attacker[1], attacker[0])
+    if check_alive(attacker[1]):  # if the recipient of the attack is still alive, they will attack back
+        attacker[0]['HP'][0] = attack(attacker[1], attacker[0])  # invokes attack function, switches order of attacker
     return [character["HP"][0], monster["HP"][0]]
 
 
