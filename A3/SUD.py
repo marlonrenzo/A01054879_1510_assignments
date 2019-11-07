@@ -153,23 +153,23 @@ def check_for_monster() -> bool:
 
 def battle(character, monster):
     rounds = 0
-    round_cases = ["A battle ensues. Tension rises. Prepare for blood and despair.", "The battle continues",
-                   "The battle continues", "The battle continues", "The battle continues"]
-    while character["HP"] > 0 and monster["HP"] > 0:
-        round += 1
+    round_cases = ["\nA battle ensues. Tension rises. Prepare for blood and despair."]
+    while character["HP"][0] > 0 and monster["HP"][0] > 0:
+        round_cases.append("\nThe battle continues.....")
         print(round_cases[rounds])
         remaining_health = combat_round(character, monster)
         character['HP'][0] = remaining_health[0]
         monster['HP'][0] = remaining_health[1]
-
+        rounds += 1
     return character['HP'][0]
 
 
 def combat_round(character, monster):
 
-    random_first_attacker = [[character, monster], [monster, character]]
-    random_number = random.randint(0, 1)
-    random_first_attacker[random_number][1]['HP'][1] = attack(random_first_attacker[random_number])
+    attacks_first = [[character, monster], [monster, character]]  # generates cases where either of them attack first
+    random_attacker = random.randint(0, 1)  # will determine which case to use in first_attacker
+    first_attacker = attacks_first[random_attacker]
+    first_attacker[1]['HP'][0] = attack(first_attacker[0], first_attacker[1])  # sets the hp of recipient to whatever attack returns
     return [character["HP"][0], monster["HP"][0]]
 
 
@@ -189,7 +189,7 @@ def attack(attacker: dict, recipient: dict) -> int:
     print(attack_outcome[random_outcome])  # prints the random outcome of an attack (hit or miss)
     if not random_outcome:  # if attack is successful
         remaining_hp = recipient['HP'][0] - attack_roll
-        print(f"The hit left {recipient['Alias']} with {remaining_hp}/{recipient['HP'][1]}")
+        print(f"The hit left {recipient['Alias']} with {remaining_hp}/{recipient['HP'][1]} HP")
         return remaining_hp
     else:
         return recipient['HP'][0]  # original HP
@@ -199,8 +199,9 @@ def check_alive(character):
     if character['HP'][1] < 0:
         print(f"As sad as it may be, {character['Name']} you have died and will flourish in the afterlife. "
               f"Try playing again")
+        return False
     else:
-        return
+        return True
 
 
 def startup():
@@ -243,9 +244,10 @@ def run_game():
 
 if __name__ == "__main__":
     # run_game()
-    hp = attack({'Name': 'Marlon', 'Alias': 'You', 'Class': 'Wizard', 'HP': [10, 10], 'Inventory': [], 'Spells': [],
+    print(battle({'Name': 'Marlon', 'Alias': 'You', 'Class': 'Wizard', 'HP': [10, 10], 'Inventory': [], 'Spells': [],
                 'position': {"x": 2, "y": 2}, "Attack Roll": 0},
-                {'Alias': "The Monster", 'HP': [5, 5], "Attack Roll": 0})
+                {'Alias': "The Monster", 'HP': [5, 5], "Attack Roll": 0}))
+
     # a = {'Name': 'Marlon', 'Alias': 'You', 'Class': 'Wizard', 'HP': [10, 10], 'Inventory': [], 'Spells': [],
     #  'position': {"x": 2, "y": 2}, "Attack Roll": 0}
     # print(f"{a['Alias']}")
