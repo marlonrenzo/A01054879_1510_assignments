@@ -23,14 +23,14 @@ def roll_die(number_of_rolls, number_of_sides):
         return total
 
 
-def validate_move(coordinates: dict, direction: int) -> bool:
+def validate_move(coordinates: dict, direction: str) -> bool:
     """
     Validate that the move will be within the 5x5 limits.
 
     :param coordinates: a dictionary
     :param direction: an int
     :precondition: coordinates must be a dictionary with x and y coordinates
-    :precondition: direction must be an integer between 1 - 4 inclusive
+    :precondition: direction must be a string
     :post condition: will return the validity of the move as a boolean
     :return: a boolean
     >>> validate_move({"x": 0, "y": 2}, 4)
@@ -42,25 +42,12 @@ def validate_move(coordinates: dict, direction: int) -> bool:
     >>> validate_move({"x": 3, "y": 2}, 4)
     True
     """
-    if (coordinates["x"] == 4 and direction == 4) or (coordinates["x"] == 0 and direction == 3):
+    if (coordinates["x"] == 4 and direction == 'd') or (coordinates["x"] == 0 and direction == 'a'):
         return False
-    elif (coordinates["y"] == 4 and direction == 2) or (coordinates["y"] == 0 and direction == 1):
+    elif (coordinates["y"] == 4 and direction == 's') or (coordinates["y"] == 0 and direction == 'w'):
         return False
     else:
         return True
-
-
-def move(position):
-    direction = get_move()
-    if direction == 5:
-        print("Thanks for playing!")
-    else:
-        valid_move = validate_move(position, direction)
-        if valid_move:
-            position = move_character(position, direction)
-        else:
-            print("Cannot go any further, there is a wall there. Try moving in another direction")
-    return position
 
 
 def move_character(coordinates: dict, direction: str) -> dict:
@@ -89,14 +76,14 @@ def move_character(coordinates: dict, direction: str) -> dict:
     return coordinates
 
 
-def get_move() -> int:
+def get_move() -> str:
     """
     Ask the user for the direction of a move.
 
     :return: an int
     """
-    user_move = int(input("Where do you want to move?\n1: up\n2: down\n3: left\n4: right\n5: quit\n"))
-    return user_move
+    user_move = input("Where do you want to move? North[W], South[S], East[D], West[A] or 'quit'")
+    return user_move.lower()
 
 
 def print_position(position):
@@ -137,15 +124,15 @@ def check_position(position, x_position, y_position):
         return 0
 
 
-def check_for_monster() -> bool:
+def twenty_five_percent_chance() -> bool:
     """
     Generate a random number between 1 and 4 exclusive, compare the random number to 2 and return a boolean.
 
-    Creates a 25% chance to encounter a monster.
+    Creates a 25% chance to return true.
     :return: a boolean
     """
-    encounter_chance = random.randint(1, 4)
-    if encounter_chance == 2:
+    chance = random.randint(1, 4)
+    if chance == 2:
         return True
     else:
         return False
@@ -162,9 +149,13 @@ def battle(character, monster):
             character['HP'][0] = remaining_health[0]
             monster['HP'][0] = remaining_health[1]
             rounds += 1
+            monster_drops_key = twenty_five_percent_chance()
+            if monster_drops_key:
+                print('The monster dropped a key!')
+                character['Inventory'].append('key')
         else:
             break
-    return character['HP'][0]
+    return character
 
 
 def combat_round(character, monster):
@@ -256,6 +247,7 @@ def check_at_exit_with_key(position, inventory):
 
 def user_win():
     print("Greatest salutations young lad! You've escaped the Kather's tunnels! You will make a noble warrior one day!")
+    return
 
 
 def run_game():
@@ -264,23 +256,25 @@ def run_game():
     character_is_alive = check_alive(character)
     while character_is_alive:
         print_position(character["position"])
-        character["position"] = move(character["position"])
-        character["HP"][0] = heal(character["HP"][0])
-        monster_encounter = check_for_monster()
-        if monster_encounter:
-            monster = new_monster()
-            character["HP"][0] = battle(character, monster)
-            character_is_alive = check_alive(character)
-        character_escape = check_at_exit_with_key(character['position'], character['Inventory'])
-        if character_escape:
-            user_win()
+        direction = get_move()
+        valid_move = validate_move(character['position'], direction)
+        if direction == 'quit':
+            print('K bye.')
             break
-        elif not user_action:
-            print("Thanks for playing!")
-            break
+        elif valid_move:
+            character["position"] = move_character(character["position"], direction)
+            character["HP"][0] = heal(character["HP"][0])
+            character_escape = check_at_exit_with_key(character['position'], character['Inventory'])
+            if character_escape:
+                user_win()
+                break
+            monster_encounter = twenty_five_percent_chance()
+            if monster_encounter:
+                monster = new_monster()
+                character = battle(character, monster)
+                character_is_alive = check_alive(character)
         else:
-            print("That was not a valid entry. Please try again.")
-
+            print("Cannot go any further, there is a wall there. Try moving in another direction")
 
 if __name__ == "__main__":
     run_game()
