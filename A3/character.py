@@ -16,11 +16,12 @@ def create_character():
     :post condition: will create a character as a dictionary of attributes
     :return: the information of a character as a dictionary
     """
-    print("\nWelcome to the Dungeon of Kather. Here are where young wizards, like yourself, learn new spells.\n"
-          "It is tradition at Castor's Thrine of Enchantment that all younglings are placed within the walls\n"
-          "of Kather to begin training. The Dungeon has 25 rooms for you to traverse through and eventually escape.\n"
-          "Use your knowledge as a spell-caster and use any items you think are useful.\n\n"
+    print("\nWelcome to the Dungeon of Kather. 'Ere are where young lads, like yourself, learn to become a warrior.\n"
+          "It is tradition at Castor's Thrine that all younglings are placed within the of Kather to begin training.\n"
+          "The Dungeon has 25 rooms for you to traverse through and eventually escape. Use your strength as a \n"
+          "young blood-seeker and use any items you may find useful.\n\n"
           "Let's begin by getting to know you.........")
-    character = {'Name': get_character_name(), 'Class': 'Wizard', 'HP': [10, 10], 'Inventory': [], 'Spells': [],
-                 'position': {"x": 2, "y": 2}}
+    character = {'Name': get_character_name(), 'Alias': "You", 'HP': [10, 10], 'Inventory': [], 'position': {"x": 2, "y": 2}}
     return character
+
+# Test dictionary: {'Name': 'Marlon', 'Alias': 'You', 'Class': 'Wizard', 'HP': [10, 10], 'Inventory': [], 'Spells': [], 'position': {"x": 2, "y": 2}, "Attack Roll": 0}
