@@ -63,7 +63,7 @@ def move(position):
     return position
 
 
-def move_character(coordinates: dict, direction: int) -> dict:
+def move_character(coordinates: dict, direction: str) -> dict:
     """
     Update coordinates based on the direction.
     :param coordinates: a dictionary
@@ -81,7 +81,7 @@ def move_character(coordinates: dict, direction: int) -> dict:
     >>> move_character({"x": 0, "y": 1}, 1)
     {'x': 0, 'y': 0}
     """
-    moves = {1: -1, 2: 1, 3: -1, 4: 1}
+    moves = {'w': -1, 's': 1, 'a': -1, 'd': 1}
     if direction == 1 or direction == 2:
         coordinates["y"] += moves[direction]
     if direction == 3 or direction == 4:
@@ -155,17 +155,19 @@ def battle(character, monster):
     rounds = 0
     round_cases = ["\nA battle ensues. Tension rises. Prepare for blood and despair."]
     while character["HP"][0] > 0 and monster["HP"][0] > 0:
-        round_cases.append("\nThe battle continues.....")
-        print(round_cases[rounds])
-        remaining_health = combat_round(character, monster)
-        character['HP'][0] = remaining_health[0]
-        monster['HP'][0] = remaining_health[1]
-        rounds += 1
+        if get_user_choice_battle() == 1:
+            round_cases.append("\nThe battle continues.....")
+            print(round_cases[rounds])
+            remaining_health = combat_round(character, monster)
+            character['HP'][0] = remaining_health[0]
+            monster['HP'][0] = remaining_health[1]
+            rounds += 1
+        else:
+            break
     return character['HP'][0]
 
 
 def combat_round(character, monster):
-
     attacks_first = [[character, monster], [monster, character]]  # generates cases where either of them attack first
     random_attacker = random.randint(0, 1)  # will determine which case to use in first_attacker
     attacker = attacks_first[random_attacker]
@@ -198,6 +200,11 @@ def attack(attacker: dict, recipient: dict) -> int:
 
 
 def check_alive(character):
+    """
+    Check a character's health
+    :param character:
+    :return:
+    """
     if character['HP'][1] < 0:
         # print(f"As sad as it may be {character['Name']}, you have died and will flourish in the afterlife. "
         #       f"Try playing again")
@@ -212,31 +219,62 @@ def startup():
     """
     print("You are awoken in a dark concrete room. Doors surround you on all sides.\n"
           "A trap door in the middle of the room protrudes the ceiling. It requires a key. \n"
-          "You observe the empty room some more.\nWords scratched against the walls - 'ESCAPE'.\n")
+          "You observe the empty room some more.\nWords scratched against the walls - 'ESCAPE'.\n"
+          "Find the key.")
 
 
-def print_dictionary(dictionary: dict):
-    for x in dictionary.keys():
-        print(f"{x}: {dictionary[x]}")
+# def print_dictionary(dictionary: dict):
+#     for x in dictionary.keys():
+#         print(f"{x}: {dictionary[x]}")
+
+
+def get_user_choice_battle() -> bool:
+    """
+    Grab user input to determine if they want to run from or fight monster.
+    :return: a boolean
+    """
+    user_input = bool(input("Would you like to fight[1] or run[0]?"))
+    return user_input
+
+
+def heal(health):
+    if health < 9:
+        health += 2
+        print(f"Whilst moving around, you have healed a bit. You're now at {health}/10 HP ")
+    elif health == 9:
+        health += 1
+        print(f"Whilst moving around, you have healed a bit. You're now at {health}/10 HP ")
+    return health
+
+
+def check_at_exit_with_key(position, inventory):
+    if position['x'] == 4 and position['y'] == 4 and inventory == ['key']:
+        return True
+    else:
+        return False
+
+
+def user_win():
+    print("Greatest salutations young lad! You've escaped the Kather's tunnels! You will make a noble warrior one day!")
 
 
 def run_game():
     character = create_character()
     startup()
-    while True:
-        actions = {1: "Move", 0: "Quit"}
+    character_is_alive = check_alive(character)
+    while character_is_alive:
         print_position(character["position"])
-        print_dictionary(actions)
-
-        user_action = int(input("\nWhat would you like to do?"))
-        if user_action == 1:
-            character["position"] = move(character["position"])
-            monster_encounter = check_for_monster()
-            if monster_encounter:
-                monster = new_monster()
-                print(f"Monster appeared! It has HP of {monster['HP'][1]}")
-                character["HP"][0] = battle(character, monster)
-                check_alive(character)
+        character["position"] = move(character["position"])
+        character["HP"][0] = heal(character["HP"][0])
+        monster_encounter = check_for_monster()
+        if monster_encounter:
+            monster = new_monster()
+            character["HP"][0] = battle(character, monster)
+            character_is_alive = check_alive(character)
+        character_escape = check_at_exit_with_key(character['position'], character['Inventory'])
+        if character_escape:
+            user_win()
+            break
         elif not user_action:
             print("Thanks for playing!")
             break
@@ -246,6 +284,8 @@ def run_game():
 
 if __name__ == "__main__":
     run_game()
+    # character = create_character()
+    # character = check_the_room(character)
     # print(battle({'Name': 'Marlon', 'Alias': 'You', 'Class': 'Wizard', 'HP': [10, 10], 'Inventory': [], 'Spells': [],
     #             'position': {"x": 2, "y": 2}, "Attack Roll": 0},
     #             {'Alias': "The Monster", 'HP': [5, 5], "Attack Roll": 0}))
