@@ -124,15 +124,15 @@ def check_position(position: dict, x_position: int, y_position: int) -> bool:
         return False
 
 
-def twenty_five_percent_chance() -> bool:
+def one_in_x_chance(x: int) -> bool:
     """
-    Generate a random number between 1 and 4 exclusive, compare the random number to 2 and return a boolean.
+    Generate a random number between 1 and x inclusive, compare the random number to half of x and return a boolean.
 
     Creates a 25% chance to return true.
     :return: a boolean
     """
-    chance = random.randint(1, 4)
-    if chance == 2:
+    chance = random.randint(1, x)
+    if chance == x / 2:
         return True
     else:
         return False
@@ -148,10 +148,11 @@ def battle(character: dict, monster: dict) -> dict:
         character['HP'][0] = remaining_health[0]
         monster['HP'][0] = remaining_health[1]
         rounds += 1
-    monster_drops_key = twenty_five_percent_chance()
+    monster_drops_key = one_in_x_chance(4)
     if monster_drops_key and character['HP'][0]:
         print('The monster dropped a key!')
         character['Inventory'].append('key')
+    print(f"Your HP is now at {character['HP'][0]}/{character['HP'][1]}")
     return character
 
 
@@ -254,13 +255,23 @@ def user_win():
     return
 
 
+def run_from_battle(character):
+    if one_in_x_chance(10):
+        damage = roll_die(1, 4)
+        character['HP'][0] -= damage
+        print(f"As you were running away, the monster swiped you and you lost {damage} HP!")
+    else:
+        print("You ran away swiftly.......")
+    return character
+
+
 def monster_encounter(character: dict) -> dict:
     """
     Determine the chance of a monster encounter, update the character after a battle if monster present.
     :param character: a dict
     :return: a dict
     """
-    if twenty_five_percent_chance():
+    if one_in_x_chance(4):
         monster = new_monster()
         return battle(character, monster)
     else:
@@ -268,29 +279,28 @@ def monster_encounter(character: dict) -> dict:
 
 
 def run_game():
-    character = create_character()
-    startup()
+    character = create_character()  # creates a new character
+    startup()  # print the starting scenario
     while True:
-        print_position(character["position"])
-        direction = get_move()
-        valid_move = validate_move(character['position'], direction)
-        if direction == 'quit':
-            print('K bye.')
+        print_position(character["position"])  # show the current position of character
+        direction = get_move()  # assigns user input to direction
+        valid_move = validate_move(character['position'], direction)  # validates a move based on position and direction
+        if direction == 'quit':  # break the loop when user inputs quit
+            print('K bye.')  # K bye.
             break
-        elif valid_move:
-            character["position"] = move_character(character["position"], direction)
-            character["HP"][0] = heal(character["HP"][0])
-            character_escape = check_at_exit_with_key(character['position'], character['Inventory'])
-            if character_escape:
+        elif valid_move:  # move the character and encounter monster if user input is valid
+            character["position"] = move_character(character["position"], direction)  # update user position when moving
+            character["HP"][0] = heal(character["HP"][0])  # heal the character each time they move
+            if check_at_exit_with_key(character['position'], character['Inventory']):  # will break loop if user escapes
                 user_win()
                 break
-            character = monster_encounter(character)  # check if monster present and update character info
-            if not check_alive(character): # break the loop if character is not alive
+            character = monster_encounter(character)  # check if monster present, update info based on actions performed
+            if not check_alive(character):  # break the loop if character is not alive
+                print("You died. Please try again.")
                 break
-        else:
+        else:  # print something when input is not recognized and/or invalid
             print("Not a valid move. Try moving in another direction.")
 
 
 if __name__ == "__main__":
     run_game()
-
