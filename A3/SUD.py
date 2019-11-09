@@ -233,12 +233,27 @@ def attack(attacker: dict, recipient: dict) -> int:
     print(attack_outcome[random_outcome])  # prints the random outcome of an attack (hit or miss)
     if not random_outcome:  # if attack is successful
         remaining_hp = recipient['HP'][0] - attack_roll  # subtract damage from the recipient's HP
-        print(f"The hit left {recipient['Alias']} with {remaining_hp}/{recipient['HP'][1]} HP")  # print remaining HP
+        print_remaining_hp(recipient, remaining_hp)  # print remaining HP
         return remaining_hp
     else:
         return recipient['HP'][0]  # original HP
 
 
+def print_remaining_hp(entity: dict, remaining_hp: int):
+    """
+    Print the remaining HP of an entity.
+
+    :param entity: a dict
+    :param remaining_hp: an int
+    :precondition: must be a properly formatted dictionary
+    :post condition: will print the remaining hp of the provided entity
+    :return: nothing
+
+    """
+    print(f"The hit left {entity['Alias']} with {remaining_hp}/{entity['HP'][1]} HP")
+    return
+
+    
 def check_alive(character: dict) -> bool:
     """
     Check a character's health
@@ -334,7 +349,18 @@ def user_win():
     return
 
 
-def fight_monster(character: dict) -> dict:
+def fight_or_run() -> int:
+    """
+    Acquire user input to run or fight.
+
+    :return: a bool
+
+    """
+    user_input = int(input("Would you like to fight [1] or run [0]?"))
+    return user_input
+
+
+def fight_monster(character: dict) -> list:
     """
     Ask user if they would like to fight or run from battle.
 
@@ -345,14 +371,16 @@ def fight_monster(character: dict) -> dict:
     :return: a dict
 
     """
-    if input("Would you like to fight [1] or run [0]?"):
+    user_decision = fight_or_run()
+    if not user_decision:  # if character decides to run (inputs 0)
         if one_in_x_chance(10):  # will modify a character's HP with a one in ten chance
             damage = roll_die(1, 4)
             character['HP'][0] -= damage
             print(f"As you were running away, the monster swiped you and you lost {damage} HP!")
+            print_remaining_hp(character, character['HP'][0])
         else:
             print("You ran away swiftly.......")
-    return character
+    return [user_decision, character]
 
 
 def monster_encounter(character: dict) -> dict:
@@ -365,12 +393,15 @@ def monster_encounter(character: dict) -> dict:
     :return: a dict
 
     """
-    if one_in_x_chance(4):  # create a 1 in 4 chance to encounter a monster
+    if one_in_x_chance(4):  # 1 in 4 chance to encounter monster
         monster = new_monster()
-        if fight_monster(character):  # if character decides to fight, initiate battle return the value it passes
+        user_decision = fight_monster(character)
+        if user_decision[0]:  # if user decides to fight, simulate battle and return result
             return battle(character, monster)
+        else:
+            return user_decision[1]  # if user decides to run, return the updated character information
     else:
-        return character
+        return character  # return character if no monster is encountered
 
 
 def run_game():
