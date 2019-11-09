@@ -9,7 +9,7 @@ def get_character_name():
     return name
 
 
-def create_character():
+def create_character() -> dict:
     """
     Create a dictionary including attributes to associate to a character.
 
@@ -17,7 +17,7 @@ def create_character():
     :return: the information of a character as a dictionary
     """
     print("\nWelcome to the Dungeon of Kather. 'Ere are where young lads, like yourself, learn to become a warrior.\n"
-          "It is tradition at Castor's Thrine that all younglings are placed within the of Kather to begin training.\n"
+          "It is tradition at Castor's Thrine that all younglings are placed within the walls of Kather to begin training.\n"
           "The Dungeon has 25 rooms for you to traverse through and eventually escape. Use your strength as a \n"
           "young blood-seeker and use any items you may find useful.\n\n"
           "Let's begin by getting to know you.........")
