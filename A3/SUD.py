@@ -3,7 +3,7 @@ from A3.monster import new_monster
 import random
 
 
-def roll_die(number_of_rolls, number_of_sides):
+def roll_die(number_of_rolls: int, number_of_sides: int) -> int:
     """
     Return a random positive integer base on the parameters.
 
@@ -69,9 +69,9 @@ def move_character(coordinates: dict, direction: str) -> dict:
     {'x': 0, 'y': 0}
     """
     moves = {'w': -1, 's': 1, 'a': -1, 'd': 1}
-    if direction == 1 or direction == 2:
+    if direction == 'w' or direction == 's':
         coordinates["y"] += moves[direction]
-    if direction == 3 or direction == 4:
+    if direction == 'a' or direction == 'd':
         coordinates["x"] += moves[direction]
     return coordinates
 
@@ -86,7 +86,7 @@ def get_move() -> str:
     return user_move.lower()
 
 
-def print_position(position):
+def print_position(position: dict):
     """
     Show the current position based on the coordinates.
 
@@ -106,7 +106,7 @@ def print_position(position):
     print("\n")
 
 
-def check_position(position, x_position, y_position):
+def check_position(position: dict, x_position: int, y_position: int) -> bool:
     """
     Check position to determine if the character is located at the coordinates.
 
@@ -119,9 +119,9 @@ def check_position(position, x_position, y_position):
     :return: an integer
     """
     if position["x"] == x_position and position["y"] == y_position:
-        return 1
+        return True
     else:
-        return 0
+        return False
 
 
 def twenty_five_percent_chance() -> bool:
@@ -138,30 +138,27 @@ def twenty_five_percent_chance() -> bool:
         return False
 
 
-def battle(character, monster):
+def battle(character: dict, monster: dict) -> dict:
     rounds = 0
     round_cases = ["\nA battle ensues. Tension rises. Prepare for blood and despair."]
     while character["HP"][0] > 0 and monster["HP"][0] > 0:
-        if get_user_choice_battle() == 1:
-            round_cases.append("\nThe battle continues.....")
-            print(round_cases[rounds])
-            remaining_health = combat_round(character, monster)
-            character['HP'][0] = remaining_health[0]
-            monster['HP'][0] = remaining_health[1]
-            rounds += 1
-            monster_drops_key = twenty_five_percent_chance()
-            if monster_drops_key:
-                print('The monster dropped a key!')
-                character['Inventory'].append('key')
-        else:
-            break
+        round_cases.append("\nThe battle continues.....")
+        print(round_cases[rounds])
+        remaining_health = combat_round(character, monster)
+        character['HP'][0] = remaining_health[0]
+        monster['HP'][0] = remaining_health[1]
+        rounds += 1
+    monster_drops_key = twenty_five_percent_chance()
+    if monster_drops_key and character['HP'][0]:
+        print('The monster dropped a key!')
+        character['Inventory'].append('key')
     return character
 
 
-def combat_round(character, monster):
-    attacks_first = [[character, monster], [monster, character]]  # generates cases where either of them attack first
-    random_attacker = random.randint(0, 1)  # will determine which case to use in first_attacker
-    attacker = attacks_first[random_attacker]
+def combat_round(character: dict, monster: dict) -> list:
+    attacks_first = [[character, monster], [monster, character]]  # generates cases where either characters attack first
+    random_attacker = random.randint(0, 1)  # will determine which case to use in first_attacker above
+    attacker = attacks_first[random_attacker]  # initializes a variable to refer to the case used
     attacker[1]['HP'][0] = attack(attacker[0], attacker[1])  # sets the hp of recipient to whatever attack returns
     if check_alive(attacker[1]):  # if the recipient of the attack is still alive, they will attack back
         attacker[0]['HP'][0] = attack(attacker[1], attacker[0])  # invokes attack function, switches order of attacker
@@ -190,15 +187,13 @@ def attack(attacker: dict, recipient: dict) -> int:
         return recipient['HP'][0]  # original HP
 
 
-def check_alive(character):
+def check_alive(character) -> bool:
     """
     Check a character's health
     :param character:
     :return:
     """
-    if character['HP'][1] < 0:
-        # print(f"As sad as it may be {character['Name']}, you have died and will flourish in the afterlife. "
-        #       f"Try playing again")
+    if character['HP'][0] <= 0:
         return False
     else:
         return True
@@ -210,13 +205,10 @@ def startup():
     """
     print("You are awoken in a dark concrete room. Doors surround you on all sides.\n"
           "A trap door in the middle of the room protrudes the ceiling. It requires a key. \n"
-          "You observe the empty room some more.\nWords scratched against the walls - 'ESCAPE'.\n"
+          "You observe the empty room some more.\nWords scratched against the door - 'ESCAPE'.\n"
+          "You realize that this is where you will come to get out of here. \n"
           "Find the key.")
-
-
-# def print_dictionary(dictionary: dict):
-#     for x in dictionary.keys():
-#         print(f"{x}: {dictionary[x]}")
+    return
 
 
 def get_user_choice_battle() -> bool:
@@ -228,7 +220,7 @@ def get_user_choice_battle() -> bool:
     return user_input
 
 
-def heal(health):
+def heal(health: int) -> int:
     if health < 9:
         health += 2
         print(f"Whilst moving around, you have healed a bit. You're now at {health}/10 HP ")
@@ -238,23 +230,47 @@ def heal(health):
     return health
 
 
-def check_at_exit_with_key(position, inventory):
-    if position['x'] == 4 and position['y'] == 4 and inventory == ['key']:
+def check_at_exit_with_key(position: dict, inventory: list) -> bool:
+    """
+    Determine if a character is at the exit coordinates with a key.
+    :param position: a dict
+    :param inventory: a list
+    :precondition: position must be a dictionary containing valid coordinates
+    :precondition: inventory must be a list
+    :return: a boolean
+    """
+    if position['x'] == 2 and position['y'] == 2 and inventory == ['key']:
         return True
     else:
         return False
 
 
 def user_win():
+    """
+    Print a line to tell the user they won the game!
+    :return: nothing
+    """
     print("Greatest salutations young lad! You've escaped the Kather's tunnels! You will make a noble warrior one day!")
     return
+
+
+def monster_encounter(character: dict) -> dict:
+    """
+    Determine the chance of a monster encounter, update the character after a battle if monster present.
+    :param character: a dict
+    :return: a dict
+    """
+    if twenty_five_percent_chance():
+        monster = new_monster()
+        return battle(character, monster)
+    else:
+        return character
 
 
 def run_game():
     character = create_character()
     startup()
-    character_is_alive = check_alive(character)
-    while character_is_alive:
+    while True:
         print_position(character["position"])
         direction = get_move()
         valid_move = validate_move(character['position'], direction)
@@ -268,22 +284,13 @@ def run_game():
             if character_escape:
                 user_win()
                 break
-            monster_encounter = twenty_five_percent_chance()
-            if monster_encounter:
-                monster = new_monster()
-                character = battle(character, monster)
-                character_is_alive = check_alive(character)
+            character = monster_encounter(character)  # check if monster present and update character info
+            if not check_alive(character): # break the loop if character is not alive
+                break
         else:
-            print("Cannot go any further, there is a wall there. Try moving in another direction")
+            print("Not a valid move. Try moving in another direction.")
+
 
 if __name__ == "__main__":
     run_game()
-    # character = create_character()
-    # character = check_the_room(character)
-    # print(battle({'Name': 'Marlon', 'Alias': 'You', 'Class': 'Wizard', 'HP': [10, 10], 'Inventory': [], 'Spells': [],
-    #             'position': {"x": 2, "y": 2}, "Attack Roll": 0},
-    #             {'Alias': "The Monster", 'HP': [5, 5], "Attack Roll": 0}))
 
-    # a = {'Name': 'Marlon', 'Alias': 'You', 'Class': 'Wizard', 'HP': [10, 10], 'Inventory': [], 'Spells': [],
-    #  'position': {"x": 2, "y": 2}, "Attack Roll": 0}
-    # print(f"{a['Alias']}")
