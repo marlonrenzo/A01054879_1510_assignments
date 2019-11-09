@@ -7,10 +7,10 @@ def roll_die(number_of_rolls: int, number_of_sides: int) -> int:
     """
     Return a random positive integer base on the parameters.
 
+    :param number_of_rolls: an integer
+    :param number_of_sides: an integer
     :precondition: both parameters must be positive.
     :post condition: will return a sum of x amount of rolls on a y-sided die
-    :param number_of_rolls: an integer determining how many times to roll the die
-    :param number_of_sides: an integer determining the upper bound of one roll
     :return: a random integer containing the sum of all rolls performed
     """
     total = 0
@@ -27,8 +27,9 @@ def validate_move(coordinates: dict, direction: str) -> bool:
     """
     Validate that the move will be within the 5x5 limits.
 
+    Check if the position is the at both x and y boundaries and if they are crossing the boundaries.
     :param coordinates: a dictionary
-    :param direction: an int
+    :param direction: a string
     :precondition: coordinates must be a dictionary with x and y coordinates
     :precondition: direction must be a string
     :post condition: will return the validity of the move as a boolean
@@ -53,6 +54,8 @@ def validate_move(coordinates: dict, direction: str) -> bool:
 def move_character(coordinates: dict, direction: str) -> dict:
     """
     Update coordinates based on the direction.
+
+    Add the number to coordinates by accessing the correct number in available_moves.
     :param coordinates: a dictionary
     :param direction: an int
     :precondition: coordinates must be a dictionary with x and y coordinates
@@ -68,11 +71,11 @@ def move_character(coordinates: dict, direction: str) -> dict:
     >>> move_character({"x": 0, "y": 1}, 1)
     {'x': 0, 'y': 0}
     """
-    moves = {'w': -1, 's': 1, 'a': -1, 'd': 1}
-    if direction == 'w' or direction == 's':
-        coordinates["y"] += moves[direction]
-    if direction == 'a' or direction == 'd':
-        coordinates["x"] += moves[direction]
+    available_moves = {'w': -1, 's': 1, 'a': -1, 'd': 1}  # a dictionary that will change coordinates based on the key
+    if direction == 'w' or direction == 's':  # change the y coordinate if user wants to move up or down
+        coordinates["y"] += available_moves[direction]
+    if direction == 'a' or direction == 'd':  # change teh x coordinate if the user wants to move left or right
+        coordinates["x"] += available_moves[direction]
     return coordinates
 
 
@@ -251,17 +254,25 @@ def user_win():
     Print a line to tell the user they won the game!
     :return: nothing
     """
-    print("Greatest salutations young lad! You've escaped the Kather's tunnels! You will make a noble warrior one day!")
+    print("Greatest salutations young lad! You've escaped Kather's tunnels! You will make a noble warrior one day!")
     return
 
 
-def run_from_battle(character):
-    if one_in_x_chance(10):
-        damage = roll_die(1, 4)
-        character['HP'][0] -= damage
-        print(f"As you were running away, the monster swiped you and you lost {damage} HP!")
-    else:
-        print("You ran away swiftly.......")
+def fight_monster(character: dict) -> dict:
+    """
+    Ask user if they would like to fight or run from battle.
+
+    Create a one in ten chance of getting damaged if character decides to run.
+    :param character:
+    :return:
+    """
+    if input("Would you like to fight [1] or run [0]?"):
+        if one_in_x_chance(10):
+            damage = roll_die(1, 4)
+            character['HP'][0] -= damage
+            print(f"As you were running away, the monster swiped you and you lost {damage} HP!")
+        else:
+            print("You ran away swiftly.......")
     return character
 
 
@@ -269,11 +280,14 @@ def monster_encounter(character: dict) -> dict:
     """
     Determine the chance of a monster encounter, update the character after a battle if monster present.
     :param character: a dict
+    :precondition: character must be a dictionary
+    :post condition: will return an (non)updated dictionary
     :return: a dict
     """
-    if one_in_x_chance(4):
+    if one_in_x_chance(4):  # create a 1 in 4 chance to encounter a monster
         monster = new_monster()
-        return battle(character, monster)
+        if fight_monster(character):  # if character decides to fight, initiate battle return the value it passes
+            return battle(character, monster)
     else:
         return character
 
