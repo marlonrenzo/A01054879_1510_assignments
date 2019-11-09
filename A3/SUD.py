@@ -1,5 +1,6 @@
 from A3.character import create_character
 from A3.monster import new_monster
+import doctest
 import random
 
 
@@ -28,12 +29,14 @@ def validate_move(coordinates: dict, direction: str) -> bool:
     Validate that the move will be within the 5x5 limits.
 
     Check if the position is the at both x and y boundaries and if they are crossing the boundaries.
+
     :param coordinates: a dictionary
     :param direction: a string
     :precondition: coordinates must be a dictionary with x and y coordinates
     :precondition: direction must be a string
     :post condition: will return the validity of the move as a boolean
     :return: a boolean
+
     >>> validate_move({"x": 0, "y": 2}, 4)
     True
     >>> validate_move({"x": 0, "y": 4}, 2)
@@ -43,12 +46,11 @@ def validate_move(coordinates: dict, direction: str) -> bool:
     >>> validate_move({"x": 3, "y": 2}, 4)
     True
     """
-    if (coordinates["x"] == 4 and direction == 'd') or (coordinates["x"] == 0 and direction == 'a'):
-        return False
-    elif (coordinates["y"] == 4 and direction == 's') or (coordinates["y"] == 0 and direction == 'w'):
-        return False
+    if (coordinates["x"] == 4 and direction == 'd') or (coordinates["x"] == 0 and direction == 'a') or \
+       (coordinates["y"] == 4 and direction == 's') or (coordinates["y"] == 0 and direction == 'w'):
+        return False  # user does not input a valid move if they try to cross a boundary
     else:
-        return True
+        return True  # user move is valid if none of the boundaries are crossed
 
 
 def move_character(coordinates: dict, direction: str) -> dict:
@@ -56,20 +58,22 @@ def move_character(coordinates: dict, direction: str) -> dict:
     Update coordinates based on the direction.
 
     Add the number to coordinates by accessing the correct number in available_moves.
+
     :param coordinates: a dictionary
     :param direction: an int
     :precondition: coordinates must be a dictionary with x and y coordinates
     :precondition: direction must be an integer between 1 - 4 inclusive
     :post condition: will return updated coordinates after the move
     :return: a dictionary
-    >>> move_character({"x": 0, "y": 0}, 4)
+
+    >>> move_character({"x": 0, "y": 0}, 'd')
     {'x': 1, 'y': 0}
-    >>> move_character({"x": 3, "y": 3}, 1)
+    >>> move_character({"x": 3, "y": 3}, 'w')
     {'x': 3, 'y': 2}
-    >>> move_character({"x": 1, "y": 1}, 3)
+    >>> move_character({"x": 1, "y": 1}, 'a')
     {'x': 0, 'y': 1}
-    >>> move_character({"x": 0, "y": 1}, 1)
-    {'x': 0, 'y': 0}
+    >>> move_character({"x": 0, "y": 1}, 's')
+    {'x': 0, 'y': 2}
     """
     available_moves = {'w': -1, 's': 1, 'a': -1, 'd': 1}  # a dictionary that will change coordinates based on the key
     if direction == 'w' or direction == 's':  # change the y coordinate if user wants to move up or down
@@ -84,6 +88,7 @@ def get_move() -> str:
     Ask the user for the direction of a move.
 
     :return: an int
+
     """
     user_move = input("Where do you want to move? North[W], South[S], East[D], West[A] or 'quit'")
     return user_move.lower()
@@ -99,6 +104,8 @@ def print_position(position: dict):
     :param position: a dictionary
     :precondition: position must be a dictionary
     :post condition: will print the location of the user
+    :return: nothing
+
     """
     place_holder = ["[ ]", "[x]"]
     for y_axis in range(5): # create the 5 rows
@@ -107,6 +114,7 @@ def print_position(position: dict):
             # Print the correct place holder within place_holder by the output produced by check_position
             print(place_holder[check_position(position, x_axis, y_axis)], end=" ")
     print("\n")
+    return
 
 
 def check_position(position: dict, x_position: int, y_position: int) -> bool:
@@ -120,6 +128,7 @@ def check_position(position: dict, x_position: int, y_position: int) -> bool:
     :precondition: x_position and y_position must be integers
     :post condition: will determine whether or not the user is located at the specified coordinates with a 1 or a 0
     :return: an integer
+
     """
     if position["x"] == x_position and position["y"] == y_position:
         return True
@@ -133,6 +142,7 @@ def one_in_x_chance(x: int) -> bool:
 
     Creates a 25% chance to return true.
     :return: a boolean
+
     """
     chance = random.randint(1, x)
     if chance == x / 2:
@@ -317,4 +327,6 @@ def run_game():
 
 
 if __name__ == "__main__":
+    doctest.testmod()
     run_game()
+
