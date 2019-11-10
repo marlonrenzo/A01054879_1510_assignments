@@ -391,7 +391,7 @@ def fight_monster(character: dict) -> list:
             print_remaining_hp(character, character['HP'][0])
         else:
             print("You ran away swiftly.......")
-    return [user_decision, character]
+    return [user_decision, character]  # return the user_decision(a bool) and the updated character(a dict)
 
 
 def monster_encounter(character: dict) -> dict:
