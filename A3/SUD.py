@@ -13,6 +13,7 @@ def roll_die(number_of_rolls: int, number_of_sides: int) -> int:
     :precondition: both parameters must be positive.
     :post condition: will return a sum of x amount of rolls on a y-sided die
     :return: a random integer containing the sum of all rolls performed
+    
     """
     total = 0
     if number_of_rolls <= 0 or number_of_sides <= 0:
@@ -253,7 +254,7 @@ def print_remaining_hp(entity: dict, remaining_hp: int):
     print(f"The hit left {entity['Alias']} with {remaining_hp}/{entity['HP'][1]} HP")
     return
 
-    
+
 def check_alive(character: dict) -> bool:
     """
     Check a character's health
@@ -410,6 +411,7 @@ def run_game():
 
     The main flow of the game that calls all functions.
     :return: nothing
+
     """
     character = create_character()  # creates a new character
     startup()  # print the starting scenario
