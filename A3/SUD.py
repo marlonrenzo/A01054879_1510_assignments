@@ -13,7 +13,7 @@ def roll_die(number_of_rolls: int, number_of_sides: int) -> int:
     :precondition: both parameters must be positive.
     :post condition: will return a sum of x amount of rolls on a y-sided die
     :return: a random integer containing the sum of all rolls performed
-    
+
     """
     total = 0
     if number_of_rolls <= 0 or number_of_sides <= 0:
@@ -250,6 +250,8 @@ def print_remaining_hp(entity: dict, remaining_hp: int):
     :post condition: will print the remaining hp of the provided entity
     :return: nothing
 
+    >>> print_remaining_hp({'Name': 'Marlon', 'Alias': 'You', 'Class': 'Wizard', 'HP': [5, 10], 'Inventory': [], 'Spells': [], 'position': {"x": 2, "y": 2}, "Attack Roll": 0}, 5)
+    The hit left You with 5/10 HP
     """
     print(f"The hit left {entity['Alias']} with {remaining_hp}/{entity['HP'][1]} HP")
     return
@@ -306,13 +308,21 @@ def heal(health: int) -> int:
     :post condition: will return a character's updated HP
     :return: an int
 
+    >>> heal(10)
+    10
+    >>> heal(5)
+    Whilst moving around, you have healed a bit. You're now at 7/10 HP
+    7
+    >>> heal(9)
+    Whilst moving around, you have healed a bit. You're now at 10/10 HP
+    10
     """
     if health < 9:
         health += 2
-        print(f"Whilst moving around, you have healed a bit. You're now at {health}/10 HP ")
+        print(f"Whilst moving around, you have healed a bit. You're now at {health}/10 HP")
     elif health == 9:
         health += 1
-        print(f"Whilst moving around, you have healed a bit. You're now at {health}/10 HP ")
+        print(f"Whilst moving around, you have healed a bit. You're now at {health}/10 HP")
     return health
 
 
