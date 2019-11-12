@@ -234,6 +234,8 @@ def attack(attacker: dict, recipient: dict) -> int:
     print(attack_outcome[random_outcome])  # prints the random outcome of an attack (hit or miss)
     if not random_outcome:  # if attack is successful
         remaining_hp = recipient['HP'][0] - attack_roll  # subtract damage from the recipient's HP
+        if remaining_hp <= 0:  # gets rid of any possibility of negative HP numbers
+            remaining_hp = 0
         print_remaining_hp(recipient, remaining_hp)  # print remaining HP
         return remaining_hp
     else:
@@ -412,6 +414,7 @@ def monster_encounter(character: dict) -> dict:
         else:
             return user_decision[1]  # if user decides to run, return the updated character information
     else:
+        character["HP"][0] = heal(character["HP"][0])  # heal character each time they move and dont encounter monster
         return character  # return character if no monster is encountered
 
 
@@ -434,7 +437,7 @@ def run_game():
             break
         elif valid_move:  # move the character and encounter monster if user input is valid
             character["position"] = move_character(character["position"], direction)  # update user position when moving
-            character["HP"][0] = heal(character["HP"][0])  # heal the character each time they move
+
             if check_at_exit_with_key(character['position'], character['Inventory']):  # will break loop if user escapes
                 user_win()
                 break
