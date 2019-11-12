@@ -24,4 +24,4 @@ def create_character() -> dict:
     character = {'Name': get_character_name(), 'Alias': "You", 'HP': [10, 10], 'Inventory': [], 'position': {"x": 2, "y": 2}}
     return character
 
-# Test dictionary: {'Name': 'Marlon', 'Alias': 'You', 'Class': 'Wizard', 'HP': [10, 10], 'Inventory': [], 'Spells': [], 'position': {"x": 2, "y": 2}, "Attack Roll": 0}
+# Test dictionary: {'Name': 'Marlon', 'Alias': 'You', 'HP': [10, 10], 'Inventory': [], 'position': {"x": 2, "y": 2}}

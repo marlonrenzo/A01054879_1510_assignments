@@ -267,7 +267,6 @@ def check_alive(character: dict) -> bool:
     :precondition: character must be a properly formed dictionary
     :post condition: will return a boolean based on the state of the character's life
     :return: a bool
-
     """
     if character['HP'][0] <= 0:
         return False
@@ -437,7 +436,6 @@ def run_game():
             break
         elif valid_move:  # move the character and encounter monster if user input is valid
             character["position"] = move_character(character["position"], direction)  # update user position when moving
-
             if check_at_exit_with_key(character['position'], character['Inventory']):  # will break loop if user escapes
                 user_win()
                 break
