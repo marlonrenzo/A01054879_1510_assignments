@@ -17,5 +17,5 @@ class TestCheckPosition(TestCase):
 
     def test_check_position_doesnt_match_negative_one_match(self):
         actual_value = check_position({"x": -123, "y": -321}, -321, -321)
-        self.assertTrue(actual_value)
+        self.assertFalse(actual_value)
 
