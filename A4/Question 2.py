@@ -1,11 +1,8 @@
 def gcd(a, b):
-    a = abs(a)
-    b = abs(b)
-    remainder = max(a, b) % min(a, b)
+    remainder = max(abs(a), abs(b)) % min(abs(a), abs(b))
     if remainder > 0:
-        return gcd(remainder, min(a, b))
-    else:
-        return min(a, b)
+        return gcd(remainder, min(abs(a), abs(b)))
+    return min(abs(a), abs(b))
 
 
 def main():
