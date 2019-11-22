@@ -9,7 +9,7 @@ def gcd(a, b):
 
 
 def main():
-    print(gcd(25, -5))
+    print(gcd(270, 192))
 
 
 if __name__ == '__main__':
