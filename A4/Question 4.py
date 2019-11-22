@@ -1,18 +1,6 @@
-# def swap_indices(a_list, index_one, index_two):
-#     a_list[index_one], a_list[index_two] = a_list[index_two], a_list[index_one]
-#     return a_list
-#
-#
-# def loop_through_items(a_list):
-#     for number in a_list:
-#         if a_list[number] > (a_list[number + 1]):
-#             a_list = swap_indices(a_list, number, number + 1)
-#     return a_list
-
-
 def selection_sort(items):
     if not len(items):
-        raise ValueError("Cannot enter an empty/ non-sortable list")
+        raise ValueError("Cannot enter an empty or non-sortable list")
     sorted_items = []
     while items:
         lowest_num = items[0]
@@ -26,7 +14,7 @@ def selection_sort(items):
 
 
 def main():
-    print(selection_sort([10, 9, 8, 3, 2, 1]))
+    print(selection_sort([]))
 
 
 if __name__ == '__main__':
