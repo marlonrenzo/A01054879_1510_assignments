@@ -12,8 +12,7 @@ def im_not_sleepy():
     third = find_largest(digit_values, 0, 6)
     fourth = find_largest(digit_values, 0, 10)
     bars = 2 + digit_values[second] + digit_values[third] + digit_values[fourth]
-    result = f"The time requiring the most amount of bars is:\n1{second}:{third}{fourth} with {bars} bars"
-    return result
+    return f"The time requiring the most amount of bars is:\n1{second}:{third}{fourth} with {bars} bars"
 
 
 def main():
