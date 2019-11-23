@@ -1,4 +1,20 @@
-def selection_sort(items):
+import doctest
+
+
+def selection_sort(items: list) -> list:
+    """
+    Sort items in a list without the use of builtin functions.
+
+    Return a new sorted list items.
+
+    :param items: a list
+    :return: a list
+
+    >>> selection_sort([5, 4, 3, 2, 1])
+    [1, 2, 3, 4, 5]
+    >>> selection_sort([15, 14, 13, 12, 11])
+    [11, 12, 13, 14, 15]
+    """
     if not len(items):
         raise ValueError("Cannot enter an empty or non-sortable list")
     sorted_items = []
@@ -14,6 +30,13 @@ def selection_sort(items):
 
 
 def main():
+    """
+    Call all functions to run the program.
+
+    :return: None
+
+    """
+    doctest.testmod()
     print(selection_sort([]))
 
 
