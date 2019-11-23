@@ -32,7 +32,7 @@ def main():
     Call all functions to run the program.
 
     :return: None
-    
+
     """
     doctest.testmod()
     dijkstra(['blue', 'white', 'blue', 'red', 'red', 'white'])
