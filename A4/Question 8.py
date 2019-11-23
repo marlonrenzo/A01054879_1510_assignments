@@ -13,7 +13,9 @@ def find_largest(values: dict, min_digit: int, max_digit: int) -> int:
     :post condition: will return the key in the dictionary with the highest value
     :return: an int
 
-    >>>find_largest()
+    >>> test = {0: 6, 1: 2, 2: 5, 3: 5, 4: 4, 5: 5, 6: 6, 7: 3, 8: 7, 9: 6}
+    >>> find_largest(test, 0, 9)
+    8
     """
     most_bars = 0
     for number in range(min_digit, max_digit):
