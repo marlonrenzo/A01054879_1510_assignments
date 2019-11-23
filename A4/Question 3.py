@@ -1,7 +1,7 @@
 import doctest
 
 
-def dijkstra(colours: list) -> list:
+def dijkstra(colours: list) -> None:
     """
     Sort the colours into a pattern resembling dutch flag.
 
