@@ -48,7 +48,7 @@ def main():
     Call all functions to run the program.
 
     :return: None
-    
+
     """
     doctest.testmod()
     print(cash_money(66.53))
