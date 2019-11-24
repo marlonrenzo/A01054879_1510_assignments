@@ -17,11 +17,16 @@ def find_largest(values: dict, min_digit: int, max_digit: int) -> int:
     >>> find_largest(test, 0, 9)
     8
 
+    >>> test = {0: 6, 1: 2, 2: 5, 3: 5, 4: 4, 5: 5, 6: 6, 7: 3, 8: 7, 9: 6}
+    >>> find_largest(test, 0, 3)
+    0
     """
     most_bars = 0  # set an arbitrary number
     for number in range(min_digit, max_digit):  # loop through the numbers between min_digit and max_digit
-        if values[number] > most_bars:  # if loop is greater than the current larger # of bars, number is now largest
+        if values[number] > values[most_bars]:  # if number is greater than current larger # of bars, number is largest
+            print(values[number])
             most_bars = number
+            print(most_bars)
     return most_bars
 
 
@@ -54,16 +59,13 @@ def get_time(digits: list) -> str:
     :post condition: will return a properly formatted time as a string
     :return: a str
 
-    >>> test = [1, 2, 3, 4]
-    >>> get_time(test)
+    >>> get_time([1, 2, 3, 4])
     '12:34'
 
-    >>> test = [1, 2, 3, 4]
-    >>> get_time(test)
+    >>> get_time([1, 2, 3, 4])
     '12:34'
 
-    >>> test = [1, 2, 3, 4]
-    >>> get_time(test)
+    >>> get_time([1, 2, 3, 4])
     '12:34'
 
     """
@@ -83,10 +85,12 @@ def get_bars(digits_values: dict, digits: list) -> int:
 
     >>> test_dict = {1: 1, 2: 2, 3: 3, 4: 4}
     >>> test_digits = [1, 2, 3, 4]
+    >>> get_bars(test_dict, test_digits)
     10
 
     >>> test_dict = {1: 1, 2: 2, 3: 3, 4: 4}
     >>> test_digits = [1, 1, 1, 1]
+    >>> get_bars(test_dict, test_digits)
     4
 
     """
@@ -111,8 +115,10 @@ def im_not_sleepy() -> str:
 
 
 def main():
-    doctest.testmod()
-    print(im_not_sleepy())
+    # doctest.testmod()
+    # print(im_not_sleepy())
+    test = {0: 6, 1: 2, 2: 5, 3: 5, 4: 4, 5: 5, 6: 6, 7: 3, 8: 7, 9: 6}
+    print(find_largest(test, 0, 2))
 
 
 if __name__ == '__main__':
