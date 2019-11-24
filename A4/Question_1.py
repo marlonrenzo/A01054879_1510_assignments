@@ -38,6 +38,8 @@ def eratosthenes(upperbound: int) -> list:
     >>> eratosthenes(100)
     [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]
     """
+    if upperbound < 0 or type(upperbound) != int:
+        raise ValueError("The value is not valid. The upperbound should be a positive integer.")
     numbers = list(range(2, upperbound + 1))  # create a list between 0 and the upperbound
     counter = 0  # begin the counter at 2 as 1 and zero are not prime numbers
     while numbers[counter] < upperbound ** (1/2):  # loop thru numbers until it reaches the square root of upperbound
