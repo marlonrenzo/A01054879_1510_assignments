@@ -24,9 +24,7 @@ def find_largest(values: dict, min_digit: int, max_digit: int) -> int:
     most_bars = 0  # set an arbitrary number
     for number in range(min_digit, max_digit):  # loop through the numbers between min_digit and max_digit
         if values[number] > values[most_bars]:  # if number is greater than current larger # of bars, number is largest
-            print(values[number])
             most_bars = number
-            print(most_bars)
     return most_bars
 
 
@@ -40,7 +38,7 @@ def get_digits(digit_values) -> list:
 
     >>> test = {0: 6, 1: 2, 2: 5, 3: 5, 4: 4, 5: 5, 6: 6, 7: 3, 8: 7, 9: 6}
     >>> get_digits(test)
-    [1, 2, 5, 8]
+    [1, 0, 5, 8]
 
     """
     first = 1  # first digit is skipped as it is automatically a 1
@@ -115,10 +113,9 @@ def im_not_sleepy() -> str:
 
 
 def main():
-    # doctest.testmod()
-    # print(im_not_sleepy())
-    test = {0: 6, 1: 2, 2: 5, 3: 5, 4: 4, 5: 5, 6: 6, 7: 3, 8: 7, 9: 6}
-    print(find_largest(test, 0, 2))
+    doctest.testmod()
+    print(im_not_sleepy())
+
 
 
 if __name__ == '__main__':
