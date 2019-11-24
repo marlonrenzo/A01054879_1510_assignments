@@ -18,7 +18,7 @@ def breakdown_amount(cash: dict, amount: float) -> dict:
     """
     new_total = {}  # initiate a new list to return later with values
     for money_value in cash.keys():  # loop through the bills and coins in the dictionary
-        if money_value < amount:  # if the amount is greater than the current bill/coin, calculate number
+        if money_value <= amount:  # if the amount is greater than the current bill/coin, calculate number
             new_total[money_value] = int(amount / money_value)  # add the total and set the value to the quotient
             amount -= money_value * new_total[money_value]  # subract the amount by the value of the bills/coins taken
     return new_total
@@ -37,10 +37,10 @@ def cash_money(amount: float) -> dict:
     >>> breakdown_amount(money, 66.53)
     {50: 1, 10: 1, 5: 1, 1: 1, 0.25: 2, 0.01: 3}
     """
-    if amount <= 0:  # raise an error if the amount is less than zero
+    if amount <= 0 or type(amount) != float:  # raise an error if the amount is less than zero
         raise ValueError("The amount you entered is not a positive float number.")
-    bills_and_coins = {100: 0, 50: 0, 20: 0, 10: 0, 5: 0, 2: 0, 1: 0, 0.25: 0, 0.10: 0, 0.05: 0, 0.01: 0}  # bills/coins
-    return breakdown_amount(bills_and_coins, amount)
+    bills_coins = {100: 0, 50: 0, 20: 0, 10: 0, 5: 0, 2: 0, 1: 0, 0.25: 0, 0.10: 0, 0.05: 0, 0.01: 0}  # bills/coins
+    return breakdown_amount(bills_coins, amount)
 
 
 def main():
@@ -51,7 +51,7 @@ def main():
 
     """
     doctest.testmod()
-    print(cash_money(66.53))
+    print(cash_money(4))
 
 
 if __name__ == '__main__':
