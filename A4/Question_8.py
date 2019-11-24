@@ -53,7 +53,7 @@ def get_time(digits: list) -> str:
     Format a list of digits into a string that resembles a time from a 12-hour clock.
 
     :param digits: a list
-    :precondition: must be a non-empty list of integers
+    :precondition: must be a non-empty list of 4 integers
     :post condition: will return a properly formatted time as a string
     :return: a str
 
