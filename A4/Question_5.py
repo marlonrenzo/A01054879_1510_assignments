@@ -20,7 +20,7 @@ def breakdown_amount(cash: dict, amount: float) -> dict:
     for money_value in cash.keys():  # loop through the bills and coins in the dictionary
         if money_value <= amount:  # if the amount is greater than the current bill/coin, calculate number
             new_total[money_value] = int(amount / money_value)  # add the total and set the value to the quotient
-            amount -= money_value * new_total[money_value]  # subract the amount by the value of the bills/coins taken
+            amount -= money_value * new_total[money_value]  # subtract the amount by the value of the bills/coins taken
     return new_total
 
 
