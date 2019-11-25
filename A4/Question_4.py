@@ -41,9 +41,7 @@ def selection_sort(items: list) -> list:
     try:
         sorted(items)  # try an action that will raise a TypeError if items is a non-sortable list
         items[0] = items[0]  # try an action that will raise an IndexError if items is an empty list
-    except IndexError:  # except the two errors if they are raised by the above statements
-        raise ValueError("The input should be a non-empty sortable list.")
-    except TypeError:  # except the two errors if they are raised by the above statements
+    except (IndexError, ValueError):  # except the two errors if they are raised by the above statements
         raise ValueError("The input should be a non-empty sortable list.")
     else:  # run the code as normal
         sorted_items = []  # initiate a new list that will have the sorted items
