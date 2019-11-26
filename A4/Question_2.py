@@ -20,7 +20,7 @@ def gcd(a: int, b: int) -> int:
     >>> gcd(5, 25)
     5
     >>> gcd(100, 50)
-    255
+    50
     """
     remainder = max(abs(a), abs(b)) % min(abs(a), abs(b))  # get remainder of high num divided by low num, ignore negative signs with abs()
     if remainder > 0:
