@@ -17,7 +17,7 @@ moving up and to the left). This should return ONE POINT as there is only one cl
 5. A set of lines with slopes so close, that the difference between them is 0.00001. The lines will eventually meet,
 so we need to ensure the program recognizes such a small difference and returns one point of intersection.
 
-6. We will test the same case as 5 (with two lines almost, but not quite parallel), but this time, have the two lines as
-negative slopes (going down and to the right). The program should recognize that these lines still aren't parallel and
-it should return ONE point of intersection.
+6. Test two lines with the same exact slopes, with the same points. These lines are laying on top of one another and
+this should return the first line argument.
+
 """
