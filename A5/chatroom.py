@@ -1,6 +1,16 @@
 import paho.mqtt.client as mqtt
 
 
+def initiate_client() -> object:
+    """
+    Initiate a new mqtt client that is stored as an object.
+
+    :return: an object
+
+    """
+    return mqtt.Client("marlon_pi")
+
+
 def on_connect(client: object, userdata: None, flags: dict, rc: int):
     """
     Display a helpful message to notify user they successfully connected to the server.
@@ -15,6 +25,7 @@ def on_connect(client: object, userdata: None, flags: dict, rc: int):
 
     """
     print("Successfully connected")
+    return
 
 
 def on_message(client: object, userdata: None, message: str):
@@ -60,11 +71,11 @@ def open_chatroom():
     :return: nothing
 
     """
-    topic = "Ugh"
-    chatroom_listener = mqtt.Client("marlon_pi")
-    connect(chatroom_listener, topic)
+    chatroom_listener = initiate_client()
+    connect(chatroom_listener, "Ugh")
     chatroom_listener.on_message = on_message
     chatroom_listener.loop_forever()
+    return
 
 
 def main():
